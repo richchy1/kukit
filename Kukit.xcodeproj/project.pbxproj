@@ -1,0 +1,695 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00EA37DDE5447B067CF3A630 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C189EF8594EB1BBE532A8F /* AppRouter.swift */; };
+		115016B9BDBB7F7C3908BF42 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826D3FE46A33D5EC0D726061 /* TodayView.swift */; };
+		14563943088BEB859A2DD13B /* TimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */; };
+		15AED05B747D007CECEF617B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D407F732F963B4F81003D1 /* HistoryView.swift */; };
+		1A1896F01CA1FC831247A000 /* CoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */; };
+		241DD4384BEC15C1FC77209E /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36B56F36BD75D6339C8B19 /* Prefs.swift */; };
+		2D2D10D445501CEE050C57DD /* CourseEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3AEF069B792172A3769DC /* CourseEditorView.swift */; };
+		2EC7B99E03B9AC43E99BCF11 /* PresetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */; };
+		2ED5599ABBD5DA4CFC1FA1E6 /* FocusComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5AF948C015F4667565ECC /* FocusComponents.swift */; };
+		3CAA7FD21B700C6AD9CE9D58 /* TimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */; };
+		463DA7D2E70B8DE286B8ACC8 /* MenuBarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEF42BB56990F4FE137F92 /* MenuBarViews.swift */; };
+		4640A3A5B442248504038D23 /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */; };
+		4825CA001E2BBDFFED89EA74 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA98334306EF7FCD7005F3B /* Models.swift */; };
+		496D782992D97FF306E8C81A /* MiniPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B6F17756BCF61F00848856 /* MiniPlayerBar.swift */; };
+		4C2D11BDCDDDE0BABA176541 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A348969B247A28E5C0F9FF3A /* NotificationService.swift */; };
+		59FA652529ED7740D49D1BCF /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A2CAB35D58A69A0E036F60 /* Components.swift */; };
+		5AF707B5B0A3BE9DA753B7BE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */; };
+		5F9B4E7DABDACBA38E7FFEBB /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E806A5D8338241D32F5FBDBB /* Theme.swift */; };
+		6E9B29FE3F199C5C4BAD235A /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E806A5D8338241D32F5FBDBB /* Theme.swift */; };
+		70B6ED90794D92D6384B5CD3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23C12EDC4412E94DC819688 /* StatsView.swift */; };
+		7606C3E899C951F8633BFAAF /* FocusComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5AF948C015F4667565ECC /* FocusComponents.swift */; };
+		788D3EF0F9AB426C0AC84810 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C189EF8594EB1BBE532A8F /* AppRouter.swift */; };
+		7A284A436141A971B03C7729 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23C12EDC4412E94DC819688 /* StatsView.swift */; };
+		80E61EB7D50C8C56AD67D8FE /* PresetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */; };
+		833D21435678219DFF18EB59 /* KukitCore in Frameworks */ = {isa = PBXBuildFile; productRef = FC8A30B17027050A46B893EB /* KukitCore */; };
+		9BB7ADA32C767155E7351985 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */; };
+		9C6EA6F795DFE32280C717AF /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D407F732F963B4F81003D1 /* HistoryView.swift */; };
+		A359C0F3026E6A8DDD6C5259 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99D2E3FA81522B984216BB20 /* Assets.xcassets */; };
+		B64AED59AB98E1FEA8A74125 /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */; };
+		BEBE3CF55A5491760A6E7999 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99D2E3FA81522B984216BB20 /* Assets.xcassets */; };
+		BF2D494F9F9501AB65953B94 /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */; };
+		C9B6AE8D06F5021D61FB171A /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826D3FE46A33D5EC0D726061 /* TodayView.swift */; };
+		D4EB1B6E8DE275A3410D53AF /* CourseEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3AEF069B792172A3769DC /* CourseEditorView.swift */; };
+		D5C39866FDD969967068A468 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729CBB523E75E85810085A5 /* AppRootView.swift */; };
+		D8988E14FA13155AE54210AC /* MiniPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B6F17756BCF61F00848856 /* MiniPlayerBar.swift */; };
+		DB0BF960B791BB5F4CFDEDFD /* KukitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E26C0F788AFD510BE5CE08C /* KukitApp.swift */; };
+		E1C681537E4727B057E56C4C /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5AD7F18688910EEEBDE0E /* AppRootView.swift */; };
+		E76CF558686FCFFA5E635F5F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA98334306EF7FCD7005F3B /* Models.swift */; };
+		E9D9FCF595E91EC93473DA32 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A2CAB35D58A69A0E036F60 /* Components.swift */; };
+		EF6AE08FF89440C4FD3B554B /* KukitCore in Frameworks */ = {isa = PBXBuildFile; productRef = FFA1CA0573F8467D7FABA33F /* KukitCore */; };
+		F4F760C3D337EA25ACA10C7F /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */; };
+		F6AD84933075C0D8A22DB4D9 /* KukitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E26C0F788AFD510BE5CE08C /* KukitApp.swift */; };
+		F75EB166CFAD2E56DE81DA27 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A348969B247A28E5C0F9FF3A /* NotificationService.swift */; };
+		FBB29072C57F37F2EF9750A9 /* CoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */; };
+		FD88EDA5648AF01734E7D6DA /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36B56F36BD75D6339C8B19 /* Prefs.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04F3AEF069B792172A3769DC /* CourseEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseEditorView.swift; sourceTree = "<group>"; };
+		0AA98334306EF7FCD7005F3B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		11A2CAB35D58A69A0E036F60 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		27AEF42BB56990F4FE137F92 /* MenuBarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViews.swift; sourceTree = "<group>"; };
+		3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetEditorView.swift; sourceTree = "<group>"; };
+		3DD5AF948C015F4667565ECC /* FocusComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusComponents.swift; sourceTree = "<group>"; };
+		46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerController.swift; sourceTree = "<group>"; };
+		4E26C0F788AFD510BE5CE08C /* KukitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KukitApp.swift; sourceTree = "<group>"; };
+		50F5AD7F18688910EEEBDE0E /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		64B6F17756BCF61F00848856 /* MiniPlayerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerBar.swift; sourceTree = "<group>"; };
+		6B36B56F36BD75D6339C8B19 /* Prefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
+		73BF61DB9D2C92F56846B8A7 /* Kukit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kukit.entitlements; sourceTree = "<group>"; };
+		7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
+		826D3FE46A33D5EC0D726061 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		9383BAA842C81F2F6B702FCD /* KukitCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = KukitCore; path = Packages/KukitCore; sourceTree = SOURCE_ROOT; };
+		99D2E3FA81522B984216BB20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9C418161812A47352CB778A9 /* Kukit-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Kukit-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A348969B247A28E5C0F9FF3A /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailView.swift; sourceTree = "<group>"; };
+		B23C12EDC4412E94DC819688 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		B5D407F732F963B4F81003D1 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		B6C189EF8594EB1BBE532A8F /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		C729CBB523E75E85810085A5 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		E609CEA9B1F44E794B9FB50F /* Kukit-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kukit-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E806A5D8338241D32F5FBDBB /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B8681E6825D9A538ED436D6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				833D21435678219DFF18EB59 /* KukitCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0E917D455035FE2B32AD859 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF6AE08FF89440C4FD3B554B /* KukitCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0811B0C9AC78A892F5441C2F /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				B5D407F732F963B4F81003D1 /* HistoryView.swift */,
+				B23C12EDC4412E94DC819688 /* StatsView.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		2BF85ECFC2982C280062879B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9C418161812A47352CB778A9 /* Kukit-iOS.app */,
+				E609CEA9B1F44E794B9FB50F /* Kukit-macOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		37419DEC331BA20F562F0521 = {
+			isa = PBXGroup;
+			children = (
+				46742D44184061ED7700983F /* Kukit */,
+				65149E3E61140F5267B9CED3 /* Packages */,
+				2BF85ECFC2982C280062879B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		46742D44184061ED7700983F /* Kukit */ = {
+			isa = PBXGroup;
+			children = (
+				860A3DE36B06DEC810994C74 /* iOS */,
+				80865256B33F5B855AFB79B6 /* macOS */,
+				CA454144FB11091924A0FF89 /* Shared */,
+			);
+			path = Kukit;
+			sourceTree = "<group>";
+		};
+		5377B8F3BCF6582E0A8B5FEB /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E20959262DFD2A1B7EFEE /* Courses */,
+				D8D8207B07307C0B770C6824 /* Focus */,
+				F2E4988FF467A41EB23AC571 /* Root */,
+				C1CB88D85FB134A2E303E87B /* Settings */,
+				0811B0C9AC78A892F5441C2F /* Stats */,
+				93680464A7E8DE2C6D06920A /* Today */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		5D5D13FF66E21C9ADF14AE2C /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				11A2CAB35D58A69A0E036F60 /* Components.swift */,
+				E806A5D8338241D32F5FBDBB /* Theme.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		65149E3E61140F5267B9CED3 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				9383BAA842C81F2F6B702FCD /* KukitCore */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		80865256B33F5B855AFB79B6 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				C729CBB523E75E85810085A5 /* AppRootView.swift */,
+				73BF61DB9D2C92F56846B8A7 /* Kukit.entitlements */,
+				27AEF42BB56990F4FE137F92 /* MenuBarViews.swift */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		860A3DE36B06DEC810994C74 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				50F5AD7F18688910EEEBDE0E /* AppRootView.swift */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		93680464A7E8DE2C6D06920A /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				826D3FE46A33D5EC0D726061 /* TodayView.swift */,
+			);
+			path = Today;
+			sourceTree = "<group>";
+		};
+		9B9F73889ACEC7BAE1FA83C4 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B6C189EF8594EB1BBE532A8F /* AppRouter.swift */,
+				A348969B247A28E5C0F9FF3A /* NotificationService.swift */,
+				46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C1CB88D85FB134A2E303E87B /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		CA454144FB11091924A0FF89 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				99D2E3FA81522B984216BB20 /* Assets.xcassets */,
+				4E26C0F788AFD510BE5CE08C /* KukitApp.swift */,
+				FACC62EAA2E8E1242F73CC93 /* Data */,
+				5D5D13FF66E21C9ADF14AE2C /* DesignSystem */,
+				5377B8F3BCF6582E0A8B5FEB /* Features */,
+				9B9F73889ACEC7BAE1FA83C4 /* Services */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		D8D8207B07307C0B770C6824 /* Focus */ = {
+			isa = PBXGroup;
+			children = (
+				3DD5AF948C015F4667565ECC /* FocusComponents.swift */,
+				7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */,
+				3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */,
+			);
+			path = Focus;
+			sourceTree = "<group>";
+		};
+		F2E4988FF467A41EB23AC571 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				64B6F17756BCF61F00848856 /* MiniPlayerBar.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		FA2E20959262DFD2A1B7EFEE /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */,
+				04F3AEF069B792172A3769DC /* CourseEditorView.swift */,
+				ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */,
+			);
+			path = Courses;
+			sourceTree = "<group>";
+		};
+		FACC62EAA2E8E1242F73CC93 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				0AA98334306EF7FCD7005F3B /* Models.swift */,
+				6B36B56F36BD75D6339C8B19 /* Prefs.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		31DF5954D570021BB42375F4 /* Kukit-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23090422D58B666373614BB5 /* Build configuration list for PBXNativeTarget "Kukit-macOS" */;
+			buildPhases = (
+				B4572AB892657A3C08E048C0 /* Sources */,
+				6D1A4B52D3742B7B24B06096 /* Resources */,
+				B8681E6825D9A538ED436D6C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Kukit-macOS";
+			packageProductDependencies = (
+				FC8A30B17027050A46B893EB /* KukitCore */,
+			);
+			productName = "Kukit-macOS";
+			productReference = E609CEA9B1F44E794B9FB50F /* Kukit-macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AD2BA5D9A99354F686B0A6E8 /* Kukit-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D065C35C593D9C121A573D9B /* Build configuration list for PBXNativeTarget "Kukit-iOS" */;
+			buildPhases = (
+				802CAC00853D6F636B2F98A6 /* Sources */,
+				B543DC2F4E372C95C2A3C6F1 /* Resources */,
+				E0E917D455035FE2B32AD859 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Kukit-iOS";
+			packageProductDependencies = (
+				FFA1CA0573F8467D7FABA33F /* KukitCore */,
+			);
+			productName = "Kukit-iOS";
+			productReference = 9C418161812A47352CB778A9 /* Kukit-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0A79D906EF6E68C979E50FBF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 7C2CFB2189EA18942D292E6E /* Build configuration list for PBXProject "Kukit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 37419DEC331BA20F562F0521;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ECD3437360D79429E5CABC9D /* XCLocalSwiftPackageReference "Packages/KukitCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2BF85ECFC2982C280062879B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AD2BA5D9A99354F686B0A6E8 /* Kukit-iOS */,
+				31DF5954D570021BB42375F4 /* Kukit-macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6D1A4B52D3742B7B24B06096 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A359C0F3026E6A8DDD6C5259 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B543DC2F4E372C95C2A3C6F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEBE3CF55A5491760A6E7999 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		802CAC00853D6F636B2F98A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1C681537E4727B057E56C4C /* AppRootView.swift in Sources */,
+				788D3EF0F9AB426C0AC84810 /* AppRouter.swift in Sources */,
+				E9D9FCF595E91EC93473DA32 /* Components.swift in Sources */,
+				BF2D494F9F9501AB65953B94 /* CourseDetailView.swift in Sources */,
+				2D2D10D445501CEE050C57DD /* CourseEditorView.swift in Sources */,
+				FBB29072C57F37F2EF9750A9 /* CoursesView.swift in Sources */,
+				7606C3E899C951F8633BFAAF /* FocusComponents.swift in Sources */,
+				B64AED59AB98E1FEA8A74125 /* FocusView.swift in Sources */,
+				15AED05B747D007CECEF617B /* HistoryView.swift in Sources */,
+				DB0BF960B791BB5F4CFDEDFD /* KukitApp.swift in Sources */,
+				496D782992D97FF306E8C81A /* MiniPlayerBar.swift in Sources */,
+				4825CA001E2BBDFFED89EA74 /* Models.swift in Sources */,
+				F75EB166CFAD2E56DE81DA27 /* NotificationService.swift in Sources */,
+				241DD4384BEC15C1FC77209E /* Prefs.swift in Sources */,
+				80E61EB7D50C8C56AD67D8FE /* PresetEditorView.swift in Sources */,
+				9BB7ADA32C767155E7351985 /* SettingsView.swift in Sources */,
+				70B6ED90794D92D6384B5CD3 /* StatsView.swift in Sources */,
+				5F9B4E7DABDACBA38E7FFEBB /* Theme.swift in Sources */,
+				3CAA7FD21B700C6AD9CE9D58 /* TimerController.swift in Sources */,
+				115016B9BDBB7F7C3908BF42 /* TodayView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B4572AB892657A3C08E048C0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5C39866FDD969967068A468 /* AppRootView.swift in Sources */,
+				00EA37DDE5447B067CF3A630 /* AppRouter.swift in Sources */,
+				59FA652529ED7740D49D1BCF /* Components.swift in Sources */,
+				4640A3A5B442248504038D23 /* CourseDetailView.swift in Sources */,
+				D4EB1B6E8DE275A3410D53AF /* CourseEditorView.swift in Sources */,
+				1A1896F01CA1FC831247A000 /* CoursesView.swift in Sources */,
+				2ED5599ABBD5DA4CFC1FA1E6 /* FocusComponents.swift in Sources */,
+				F4F760C3D337EA25ACA10C7F /* FocusView.swift in Sources */,
+				9C6EA6F795DFE32280C717AF /* HistoryView.swift in Sources */,
+				F6AD84933075C0D8A22DB4D9 /* KukitApp.swift in Sources */,
+				463DA7D2E70B8DE286B8ACC8 /* MenuBarViews.swift in Sources */,
+				D8988E14FA13155AE54210AC /* MiniPlayerBar.swift in Sources */,
+				E76CF558686FCFFA5E635F5F /* Models.swift in Sources */,
+				4C2D11BDCDDDE0BABA176541 /* NotificationService.swift in Sources */,
+				FD88EDA5648AF01734E7D6DA /* Prefs.swift in Sources */,
+				2EC7B99E03B9AC43E99BCF11 /* PresetEditorView.swift in Sources */,
+				5AF707B5B0A3BE9DA753B7BE /* SettingsView.swift in Sources */,
+				7A284A436141A971B03C7729 /* StatsView.swift in Sources */,
+				6E9B29FE3F199C5C4BAD235A /* Theme.swift in Sources */,
+				14563943088BEB859A2DD13B /* TimerController.swift in Sources */,
+				C9B6AE8D06F5021D61FB171A /* TodayView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		200B2C3400C652F5E23BB64D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richchy.kukit;
+				PRODUCT_NAME = Kukit;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		2D415D4BA0F620AFD3EB9883 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Kukit/macOS/Kukit.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richchy.kukit;
+				PRODUCT_NAME = Kukit;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4318BB9D8AF3334E9802F689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Kukit;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© richchy";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		58A1AF1B10D945EE482585DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Kukit/macOS/Kukit.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richchy.kukit;
+				PRODUCT_NAME = Kukit;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6C6AF1215889705B63AC0809 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richchy.kukit;
+				PRODUCT_NAME = Kukit;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		C2C13F2CDE9800686225FDBB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Kukit;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© richchy";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		23090422D58B666373614BB5 /* Build configuration list for PBXNativeTarget "Kukit-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D415D4BA0F620AFD3EB9883 /* Debug */,
+				58A1AF1B10D945EE482585DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7C2CFB2189EA18942D292E6E /* Build configuration list for PBXProject "Kukit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C2C13F2CDE9800686225FDBB /* Debug */,
+				4318BB9D8AF3334E9802F689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D065C35C593D9C121A573D9B /* Build configuration list for PBXNativeTarget "Kukit-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				200B2C3400C652F5E23BB64D /* Debug */,
+				6C6AF1215889705B63AC0809 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		ECD3437360D79429E5CABC9D /* XCLocalSwiftPackageReference "Packages/KukitCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/KukitCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC8A30B17027050A46B893EB /* KukitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KukitCore;
+		};
+		FFA1CA0573F8467D7FABA33F /* KukitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KukitCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0A79D906EF6E68C979E50FBF /* Project object */;
+}

@@ -1,0 +1,90 @@
+# Kukit — XcodeGen project definition.
+# Regenerate the Xcode project after editing this file:  xcodegen generate
+name: Kukit
+
+options:
+  bundleIdPrefix: com.richchy
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "18.0"
+    macOS: "15.0"
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    GENERATE_INFOPLIST_FILE: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    INFOPLIST_KEY_CFBundleDisplayName: Kukit
+    INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
+    INFOPLIST_KEY_NSHumanReadableCopyright: "© richchy"
+
+packages:
+  KukitCore:
+    path: Packages/KukitCore
+
+targets:
+  Kukit-iOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: Kukit/Shared
+      - path: Kukit/iOS
+    dependencies:
+      - package: KukitCore
+    settings:
+      base:
+        PRODUCT_NAME: Kukit
+        PRODUCT_BUNDLE_IDENTIFIER: com.richchy.kukit
+        TARGETED_DEVICE_FAMILY: "1"
+        SDKROOT: iphoneos
+        SUPPORTS_MACCATALYST: NO
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIUserInterfaceStyle: Automatic
+
+  Kukit-macOS:
+    type: application
+    platform: macOS
+    sources:
+      - path: Kukit/Shared
+      - path: Kukit/macOS
+    dependencies:
+      - package: KukitCore
+    entitlements:
+      path: Kukit/macOS/Kukit.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+    settings:
+      base:
+        PRODUCT_NAME: Kukit
+        PRODUCT_BUNDLE_IDENTIFIER: com.richchy.kukit
+        ARCHS: arm64
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+
+schemes:
+  Kukit-iOS:
+    build:
+      targets:
+        Kukit-iOS: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+  Kukit-macOS:
+    build:
+      targets:
+        Kukit-macOS: all
+    run:
+      config: Debug
+    archive:
+      config: Release
