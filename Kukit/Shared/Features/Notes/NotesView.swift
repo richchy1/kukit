@@ -62,12 +62,14 @@ struct NotesView: View {
             detailPane
         }
         .navigationTitle("Notes")
+        .searchable(text: $search, prompt: "Search notes, tasks, courses")
         .toolbar { toolbarItems }
         .modifier(sharedModifiers)
         #else
         NavigationStack(path: $path) {
             listPane
                 .navigationTitle("Notes")
+                .searchable(text: $search, prompt: "Search notes, tasks, courses")
                 .toolbar { toolbarItems }
                 .navigationDestination(for: Note.self) { note in
                     NoteEditorView(note: note) { open($0) }
@@ -104,10 +106,7 @@ struct NotesView: View {
     }
 
     private var sharedModifiers: some ViewModifier {
-        NotesModifiers(
-            search: $search, editingTask: $editingTask, pendingDelete: $pendingDelete,
-            delete: delete(_:)
-        )
+        NotesModifiers(editingTask: $editingTask, pendingDelete: $pendingDelete, delete: delete(_:))
     }
 
     private var listPane: some View {
@@ -269,15 +268,12 @@ struct NotesView: View {
 }
 
 private struct NotesModifiers: ViewModifier {
-    @Environment(\.modelContext) private var context
-    @Binding var search: String
     @Binding var editingTask: Assignment?
     @Binding var pendingDelete: Note?
     var delete: (Note) -> Void
 
     func body(content: Content) -> some View {
         content
-            .searchable(text: $search, prompt: "Search notes, tasks, courses")
             .sheet(item: $editingTask) { AssignmentEditorView(assignment: $0) }
             .confirmationDialog(
                 "Delete “\(pendingDelete?.displayTitle ?? "page")”?",

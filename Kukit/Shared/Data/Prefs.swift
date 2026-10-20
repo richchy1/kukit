@@ -19,6 +19,7 @@ enum Prefs {
     static let lastPresetID = "state.lastPresetID"
     static let lastCourseID = "state.lastCourseID"
     static let lastBackupDate = "state.lastBackupDate"
+    static let onboardingDone = "state.onboardingDone"
 
     static func registerDefaults() {
         UserDefaults.standard.register(defaults: [

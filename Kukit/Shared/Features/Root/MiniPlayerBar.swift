@@ -92,5 +92,6 @@ extension View {
                 }
             }
             .task { ReminderScheduler.shared.scheduleResync(context) }
+            .onboarding()
     }
 }

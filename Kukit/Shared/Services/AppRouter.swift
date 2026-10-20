@@ -37,6 +37,9 @@ enum AppSection: String, CaseIterable, Identifiable, Hashable {
 @Observable
 final class AppRouter {
     /// Launch with `-startSection stats` (any section name) to open straight onto a screen.
+    /// Set to show the welcome flow (first launch, or from Settings).
+    var showOnboarding = false
+
     var section: AppSection = AppSection(rawValue: UserDefaults.standard.string(forKey: "startSection") ?? "") ?? .today
 }
 

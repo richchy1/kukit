@@ -120,18 +120,32 @@ struct StatsView: View {
                 }
             }
         }
+        .chartYScale(domain: 0...yAxisMax)
         .chartYAxis {
-            AxisMarks { value in
+            AxisMarks(values: .stride(by: yAxisStep)) { value in
                 AxisGridLine()
                 AxisValueLabel {
                     if let minutes = value.as(Double.self) {
-                        Text(DurationFormat.short(minutes * 60))
+                        Text(minutes == 0 ? "0" : DurationFormat.short(minutes * 60))
                     }
                 }
             }
         }
         .accessibilityLabel("Focus time per day")
         .accessibilityValue("Total \(DurationFormat.short(totalSeconds))")
+    }
+
+    /// Whole 30-minute / 1-hour steps instead of whatever the chart would pick (50m, 1h 40m…).
+    private var yAxisStep: Double {
+        let peak = max(daily.map { $0.seconds / 60 }.max() ?? 0, Double(goalMinutes))
+        if peak <= 150 { return 30 }
+        if peak <= 400 { return 60 }
+        return 120
+    }
+
+    private var yAxisMax: Double {
+        let peak = max(daily.map { $0.seconds / 60 }.max() ?? 0, Double(goalMinutes))
+        return (peak / yAxisStep).rounded(.up) * yAxisStep
     }
 
     private func courseBar(_ entry: CourseTotal) -> some View {
@@ -144,8 +158,15 @@ struct StatsView: View {
                 Spacer()
                 Text(DurationFormat.short(entry.seconds)).font(.subheadline).monospacedDigit()
             }
-            ProgressView(value: entry.seconds, total: max(maxSeconds, 1))
-                .tint(course?.color ?? .secondary)
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule().fill((course?.color ?? Color.secondary).opacity(0.15))
+                    Capsule()
+                        .fill(course?.color ?? Color.secondary)
+                        .frame(width: max(6, proxy.size.width * entry.seconds / max(maxSeconds, 1)))
+                }
+            }
+            .frame(height: 8)
         }
         .accessibilityElement(children: .combine)
     }

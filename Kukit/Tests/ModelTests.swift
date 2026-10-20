@@ -416,6 +416,56 @@ struct BackupTests {
     }
 }
 
+@MainActor
+@Suite("Scale")
+struct LargeDataTests {
+    /// 2,000 sessions and 500 notes: the calculations and a full backup round trip stay quick.
+    @Test func largeDataStaysFast() throws {
+        let container = try KukitSchema.makeContainer(inMemory: true)
+        let context = ModelContext(container)
+        GradingScales.seedIfNeeded(context)
+        let courses = (0..<8).map { Course(name: "Course \($0)") }
+        courses.forEach { context.insert($0) }
+        let base = Date(timeIntervalSince1970: 1_780_000_000)
+        for i in 0..<2000 {
+            let start = base.addingTimeInterval(Double(i) * 3_000)
+            context.insert(StudySession(startedAt: start, endedAt: start.addingTimeInterval(1500), focusSeconds: 1500,
+                                        presetName: "Classic", kind: .pomodoro, course: courses[i % 8]))
+        }
+        for i in 0..<500 {
+            context.insert(Note(title: "Note \(i)", markdownBody: String(repeating: "line **bold** and [[Link]]\n- [ ] item\n", count: 20),
+                                course: courses[i % 8]))
+        }
+        try context.save()
+
+        let clock = ContinuousClock()
+        let sessions = try context.fetch(FetchDescriptor<StudySession>())
+        let statsTime = clock.measure {
+            let calc = StatsCalculator()
+            let summaries = sessions.map(\.summary)
+            _ = calc.dailyTotals(summaries, endingOn: base.addingTimeInterval(86_400 * 60), days: 30)
+            _ = calc.courseTotals(summaries, from: .distantPast, to: .distantFuture)
+            _ = calc.currentStreak(summaries, goalSeconds: 3_600, asOf: base)
+        }
+        #expect(statsTime < .seconds(1))
+
+        let notes = try context.fetch(FetchDescriptor<Note>())
+        let searchTime = clock.measure { _ = notes.filter { $0.markdownBody.localizedCaseInsensitiveContains("bold") } }
+        #expect(searchTime < .seconds(2))
+
+        var exported = Data()
+        let exportTime = try clock.measure { exported = try BackupService.exportData(from: context) }
+        #expect(exportTime < .seconds(5))
+        let target = ModelContext(try KukitSchema.makeContainer(inMemory: true))
+        let importTime = try clock.measure {
+            try BackupService.restore(try BackupService.decode(exported), mode: .merge, into: target)
+        }
+        #expect(importTime < .seconds(15))
+        #expect(try target.fetchCount(FetchDescriptor<StudySession>()) == 2000)
+        #expect(try target.fetchCount(FetchDescriptor<Note>()) == 500)
+    }
+}
+
 private extension GradeScale {
     /// Band IDs are random per instance; align them so two scales compare by content only.
     func withSameBandIDs(as other: GradeScale) -> GradeScale {

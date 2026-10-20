@@ -16,6 +16,7 @@ struct SettingsView: View {
     @AppStorage(Prefs.menuBarCountdown) private var menuBarCountdown = true
 
     @Environment(\.openURL) private var openURL
+    @Environment(AppRouter.self) private var router
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
 
     var body: some View {
@@ -88,6 +89,7 @@ struct SettingsView: View {
 
             Section("About") {
                 LabeledContent("Kukit", value: version)
+                Button("Show the welcome tour", systemImage: "sparkles") { router.showOnboarding = true }
                 Text("Cook it. Study timer, grades and tasks for university.")
                     .font(.footnote).foregroundStyle(.secondary)
             }

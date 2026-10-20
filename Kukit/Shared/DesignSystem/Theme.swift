@@ -41,7 +41,8 @@ enum Theme {
 
     static var cardBackground: Color {
         #if os(macOS)
-        Color(nsColor: .controlBackgroundColor)
+        // A translucent tint reads as a card on any window background, light or dark.
+        Color.primary.opacity(0.06)
         #else
         Color(uiColor: .secondarySystemGroupedBackground)
         #endif
