@@ -33,4 +33,5 @@ cd Packages/KukitCore && swift test
 
 ## Status
 
-v0.1 in progress: courses, focus timer (Classic 25/5, Deep Work 50/10, custom techniques, stopwatch), session history, stats, Mac menu bar timer, iPhone mini-player. Next: assignments and reminders (v0.2).
+- v0.1 — courses, focus timer (Classic 25/5, Deep Work 50/10, custom techniques, stopwatch), history, stats, Mac menu bar timer, iPhone mini-player
+- v0.2 — tasks with due dates, priorities and reminders (local notifications), Today view, week calendar, optional one-way push to Apple Reminders

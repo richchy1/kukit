@@ -41,6 +41,14 @@ struct SettingsView: View {
                 }
             }
 
+            Section("Reminders") {
+                NavigationLink {
+                    ReminderDefaultsView()
+                } label: {
+                    Label("Default reminder timing", systemImage: "bell.badge")
+                }
+            }
+
             Section {
                 LabeledContent("Alerts", value: statusText)
                 if notificationStatus == .notDetermined {
@@ -100,6 +108,45 @@ struct SettingsView: View {
         #else
         if let url = URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension") { openURL(url) }
         #endif
+    }
+}
+
+struct ReminderDefaultsView: View {
+    @Environment(\.modelContext) private var context
+    @AppStorage(Prefs.reminderOffsetsTask) private var taskOffsets = "1440,120"
+    @AppStorage(Prefs.reminderOffsetsExam) private var examOffsets = "4320,1440,120"
+    @AppStorage(Prefs.allDayReminderHour) private var morningHour = 9
+
+    var body: some View {
+        Form {
+            Section {
+                ReminderOffsetPicker(offsets: binding($taskOffsets))
+            } header: {
+                Text("Tasks")
+            } footer: {
+                Text("Used for every task unless you pick custom timing on it.")
+            }
+            Section("Exams") {
+                ReminderOffsetPicker(offsets: binding($examOffsets))
+            }
+            Section {
+                Stepper(value: $morningHour, in: 5...12) {
+                    LabeledContent("Morning reminder at", value: "\(morningHour):00")
+                }
+            } footer: {
+                Text("Tasks with a date but no time remind you at this hour, on the day (or days before).")
+            }
+        }
+        .formStyle(.grouped)
+        .navigationTitle("Reminder timing")
+        .onDisappear { ReminderScheduler.shared.scheduleResync(context) }
+    }
+
+    private func binding(_ text: Binding<String>) -> Binding<Set<Int>> {
+        Binding(
+            get: { Set(ReminderDefaults.parse(text.wrappedValue)) },
+            set: { text.wrappedValue = ReminderDefaults.format(Array($0)) }
+        )
     }
 }
 

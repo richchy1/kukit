@@ -13,6 +13,8 @@ final class TimerController {
     /// Remembered selections for the next session.
     private(set) var selectedPresetID: String
     private(set) var selectedCourseID: UUID?
+    /// The task the next session will be attached to (cleared once a session starts).
+    private(set) var selectedAssignmentID: UUID?
 
     @ObservationIgnored private let modelContext: ModelContext
     @ObservationIgnored private let defaults = UserDefaults.standard
@@ -41,13 +43,19 @@ final class TimerController {
         defaults.set(id?.uuidString, forKey: Prefs.lastCourseID)
     }
 
+    func selectAssignment(_ id: UUID?) {
+        selectedAssignmentID = id
+    }
+
     // MARK: Commands
 
     /// Starts a session for the selected course. A course is required.
     func start(config: TimerConfig) {
         guard let courseID = selectedCourseID else { return }
         refreshOptions()
-        let events = engine.start(config: config, context: TimerContext(courseID: courseID), now: .now)
+        let context = TimerContext(courseID: courseID, assignmentID: selectedAssignmentID)
+        selectedAssignmentID = nil
+        let events = engine.start(config: config, context: context, now: .now)
         commit(events)
         Task { await notifications.requestAuthorizationIfNeeded(); syncAlerts() }
     }

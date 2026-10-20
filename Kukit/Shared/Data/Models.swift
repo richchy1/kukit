@@ -41,6 +41,9 @@ final class Course {
     @Relationship(deleteRule: .cascade, inverse: \StudySession.course)
     var sessions: [StudySession]?
 
+    @Relationship(deleteRule: .cascade, inverse: \Assignment.course)
+    var assignments: [Assignment]?
+
     init(name: String, code: String = "", credits: Double = 3,
          colorHex: String = CoursePalette.colors[0].hex, symbolName: String = "book.closed",
          instructor: String = "", semester: Semester? = nil) {
@@ -86,6 +89,116 @@ final class StudySession {
     }
 }
 
+enum AssignmentType: String, CaseIterable, Identifiable, Sendable {
+    case homework, quiz, project, lab, exam, reading, other
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .homework: "Homework"
+        case .quiz: "Quiz"
+        case .project: "Project"
+        case .lab: "Lab"
+        case .exam: "Exam"
+        case .reading: "Reading"
+        case .other: "Other"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .homework: "pencil.and.list.clipboard"
+        case .quiz: "questionmark.circle"
+        case .project: "hammer"
+        case .lab: "flask"
+        case .exam: "graduationcap"
+        case .reading: "book"
+        case .other: "tray"
+        }
+    }
+}
+
+enum AssignmentPriority: Int, CaseIterable, Identifiable, Sendable {
+    case low = 0, normal = 1, high = 2
+
+    var id: Int { rawValue }
+
+    var title: String {
+        switch self {
+        case .low: "Low"
+        case .normal: "Normal"
+        case .high: "High"
+        }
+    }
+}
+
+enum AssignmentStatus: String, CaseIterable, Identifiable, Sendable {
+    case todo, inProgress, done
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .todo: "To do"
+        case .inProgress: "In progress"
+        case .done: "Done"
+        }
+    }
+}
+
+@Model
+final class Assignment {
+    var id: UUID = UUID()
+    var title: String = ""
+    var typeRaw: String = AssignmentType.homework.rawValue
+    /// For date-only tasks this is the start of the due day.
+    var dueDate: Date?
+    var hasDueTime: Bool = false
+    var priorityRaw: Int = AssignmentPriority.normal.rawValue
+    var statusRaw: String = AssignmentStatus.todo.rawValue
+    var details: String = ""
+    var remindersEnabled: Bool = true
+    /// Minutes before the due moment; nil means "use the defaults from Settings".
+    var customReminderOffsets: [Int]?
+    var completedAt: Date?
+    var createdAt: Date = Date.now
+    /// Synced flag; the EventKit identifier itself is kept per device (see EventKitService).
+    var addedToAppleReminders: Bool = false
+    var addedToCalendar: Bool = false
+
+    var course: Course?
+
+    init(title: String, course: Course?, type: AssignmentType = .homework,
+         dueDate: Date? = nil, hasDueTime: Bool = false) {
+        self.title = title
+        self.course = course
+        self.typeRaw = type.rawValue
+        self.dueDate = dueDate
+        self.hasDueTime = hasDueTime
+    }
+
+    var type: AssignmentType {
+        get { AssignmentType(rawValue: typeRaw) ?? .other }
+        set { typeRaw = newValue.rawValue }
+    }
+
+    var priority: AssignmentPriority {
+        get { AssignmentPriority(rawValue: priorityRaw) ?? .normal }
+        set { priorityRaw = newValue.rawValue }
+    }
+
+    var status: AssignmentStatus {
+        get { AssignmentStatus(rawValue: statusRaw) ?? .todo }
+        set {
+            statusRaw = newValue.rawValue
+            completedAt = newValue == .done ? (completedAt ?? .now) : nil
+        }
+    }
+
+    var isDone: Bool { status == .done }
+}
+
 /// A user-defined timer technique. Built-in presets (Classic, Deep Work, Stopwatch) live in
 /// code as `TimerConfig` values, so they never appear here or get duplicated by sync.
 @Model
@@ -121,7 +234,7 @@ final class TimerPreset {
 
 enum KukitSchema {
     static let models: [any PersistentModel.Type] = [
-        Semester.self, Course.self, StudySession.self, TimerPreset.self,
+        Semester.self, Course.self, StudySession.self, TimerPreset.self, Assignment.self,
     ]
 
     @MainActor

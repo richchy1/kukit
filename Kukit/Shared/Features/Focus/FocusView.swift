@@ -8,6 +8,7 @@ struct FocusView: View {
     @Environment(\.modelContext) private var context
 
     @Query(sort: \Course.name) private var allCourses: [Course]
+    @Query private var assignments: [Assignment]
     @Query(sort: [SortDescriptor(\TimerPreset.sortOrder), SortDescriptor(\TimerPreset.createdAt)])
     private var customPresets: [TimerPreset]
 
@@ -36,6 +37,11 @@ struct FocusView: View {
     private var activeCourse: Course? {
         let id = state.isActive ? state.context.courseID : timer.selectedCourseID
         return allCourses.first { $0.id == id }
+    }
+
+    private func assignment(_ id: UUID?) -> Assignment? {
+        guard let id else { return nil }
+        return assignments.first { $0.id == id }
     }
 
     var body: some View {
@@ -86,6 +92,11 @@ struct FocusView: View {
                         .font(.subheadline.weight(.medium))
                 }
             }
+            if let task = assignment(state.context.assignmentID) {
+                Label(task.title, systemImage: "checklist")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
             TimerControls { confirmDiscard = true }
         }
     }
@@ -104,6 +115,21 @@ struct FocusView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Course").font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
                     CoursePickerMenu(courses: courses, selectedID: timer.selectedCourseID) { timer.selectCourse($0) }
+                }
+
+                if let task = assignment(timer.selectedAssignmentID) {
+                    HStack {
+                        Label("Working on: \(task.title)", systemImage: "checklist")
+                            .font(.subheadline)
+                            .lineLimit(1)
+                        Spacer()
+                        Button { timer.selectAssignment(nil) } label: {
+                            Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Clear task")
+                    }
+                    .card(padding: 12)
                 }
 
                 VStack(alignment: .leading, spacing: 8) {

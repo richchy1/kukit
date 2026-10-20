@@ -81,11 +81,16 @@ extension View {
         safeAreaInset(edge: .bottom, spacing: 0) { MiniPlayerBar() }
     }
 
-    /// Re-checks the timer whenever the app becomes active (returning from the background,
-    /// waking the Mac) so a phase that ended while away is handled right away.
-    func refreshTimerWhenActive(_ timer: TimerController, scenePhase: ScenePhase) -> some View {
-        onChange(of: scenePhase) { _, phase in
-            if phase == .active { timer.refresh() }
-        }
+    /// Re-checks the timer and re-plans assignment reminders whenever the app becomes active
+    /// (returning from the background, waking the Mac).
+    func refreshTimerWhenActive(_ timer: TimerController, scenePhase: ScenePhase, context: ModelContext) -> some View {
+        self
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    timer.refresh()
+                    ReminderScheduler.shared.scheduleResync(context)
+                }
+            }
+            .task { ReminderScheduler.shared.scheduleResync(context) }
     }
 }

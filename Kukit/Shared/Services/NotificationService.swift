@@ -1,5 +1,6 @@
 import Foundation
 import UserNotifications
+import KukitCore
 
 /// Schedules the local notifications that tell the user a phase has ended — including when
 /// the app is closed or the phone is locked.
@@ -73,6 +74,28 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             let interval = max(1, item.date.timeIntervalSinceNow)
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
             try? await center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+        }
+    }
+
+    /// Makes the pending assignment reminders match `planned`. Content may have changed
+    /// (a title edit), so every planned reminder is (re)added under its stable ID.
+    func syncTasks(_ planned: [PlannedReminder]) async {
+        let pending = await center.pendingNotificationRequests()
+        let mine = Set(pending.map(\.identifier).filter { $0.hasPrefix(ReminderPlanner.identifierPrefix) })
+        let stale = mine.subtracting(planned.map(\.id))
+        if !stale.isEmpty {
+            center.removePendingNotificationRequests(withIdentifiers: Array(stale))
+        }
+        for item in planned {
+            let content = UNMutableNotificationContent()
+            content.title = item.title
+            content.body = item.body
+            content.sound = .default
+            let components = Calendar.current.dateComponents(
+                [.year, .month, .day, .hour, .minute, .second], from: item.fireDate
+            )
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            try? await center.add(UNNotificationRequest(identifier: item.id, content: content, trigger: trigger))
         }
     }
 

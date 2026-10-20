@@ -11,7 +11,9 @@ struct TodayView: View {
     @Query(sort: \Course.name) private var allCourses: [Course]
     @Query(sort: [SortDescriptor(\TimerPreset.sortOrder), SortDescriptor(\TimerPreset.createdAt)])
     private var customPresets: [TimerPreset]
+    @Query private var assignments: [Assignment]
     @AppStorage(Prefs.dailyGoalMinutes) private var goalMinutes = 120
+    @State private var editing: Assignment?
 
     private let calculator = StatsCalculator()
 
@@ -27,11 +29,31 @@ struct TodayView: View {
     }
     private var selectedCourse: Course? { allCourses.first { $0.id == timer.selectedCourseID } }
 
+    /// Open tasks that are overdue or due within the next three days.
+    private var dueSoon: [Assignment] {
+        let calendar = Calendar.current
+        let horizon = calendar.date(byAdding: .day, value: 4, to: calendar.startOfDay(for: .now)) ?? .now
+        let soon = assignments.filter { item in
+            guard !item.isDone, let due = item.dueDate else { return false }
+            return due < horizon
+        }
+        return Assignment.sortedByUrgency(soon)
+    }
+
+    private var nextExam: Assignment? {
+        let today = Calendar.current.startOfDay(for: .now)
+        return assignments
+            .filter { $0.type == .exam && !$0.isDone && ($0.dueDate ?? .distantPast) >= today }
+            .min { ($0.dueDate ?? .distantFuture) < ($1.dueDate ?? .distantFuture) }
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 greeting
                 focusCard
+                dueSoonCard
+                examCard
                 goalCard
                 weekCard
             }
@@ -41,6 +63,7 @@ struct TodayView: View {
         }
         .background(Theme.screenBackground)
         .navigationTitle("Today")
+        .sheet(item: $editing) { AssignmentEditorView(assignment: $0) }
     }
 
     // MARK: Cards
@@ -128,6 +151,60 @@ struct TodayView: View {
                 }
             }
             .card()
+        }
+    }
+
+    @ViewBuilder
+    private var dueSoonCard: some View {
+        if !dueSoon.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Due soon").font(.headline)
+                    Spacer()
+                    Button("All tasks") { router.section = .tasks }
+                        .font(.subheadline)
+                        .buttonStyle(.borderless)
+                }
+                ForEach(dueSoon.prefix(5)) { item in
+                    AssignmentRow(assignment: item) { editing = item }
+                    if item.id != dueSoon.prefix(5).last?.id { Divider() }
+                }
+                if dueSoon.count > 5 {
+                    Text("+ \(dueSoon.count - 5) more")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+            }
+            .card()
+        }
+    }
+
+    @ViewBuilder
+    private var examCard: some View {
+        if let exam = nextExam, let due = exam.dueDate {
+            let days = Calendar.current.dateComponents(
+                [.day], from: Calendar.current.startOfDay(for: .now), to: Calendar.current.startOfDay(for: due)
+            ).day ?? 0
+            Button { editing = exam } label: {
+                HStack(spacing: 14) {
+                    VStack(spacing: 0) {
+                        Text("\(days)").font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit()
+                        Text(days == 1 ? "day" : "days").font(.caption2).foregroundStyle(.secondary)
+                    }
+                    .frame(width: 56)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Next exam").font(.caption).foregroundStyle(.secondary)
+                        Text(exam.title).font(.headline)
+                        Text([exam.course?.name, exam.dueDescription].compactMap { $0 }.joined(separator: " · "))
+                            .font(.subheadline).foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Image(systemName: "graduationcap.fill").foregroundStyle(exam.course?.color ?? Theme.accent)
+                }
+                .contentShape(Rectangle())
+                .card()
+            }
+            .buttonStyle(.plain)
+            .accessibilityElement(children: .combine)
         }
     }
 

@@ -10,6 +10,9 @@ enum Prefs {
     static let keepScreenAwake = "pref.keepScreenAwake"
     static let showMenuBar = "pref.showMenuBar"
     static let menuBarCountdown = "pref.menuBarCountdown"
+    static let reminderOffsetsTask = "pref.reminderOffsets.task"
+    static let reminderOffsetsExam = "pref.reminderOffsets.exam"
+    static let allDayReminderHour = "pref.allDayReminderHour"
 
     // Remembered state
     static let timerState = "state.timerState"
@@ -24,6 +27,53 @@ enum Prefs {
             keepScreenAwake: true,
             showMenuBar: true,
             menuBarCountdown: true,
+            reminderOffsetsTask: "1440,120",
+            reminderOffsetsExam: "4320,1440,120",
+            allDayReminderHour: 9,
         ])
+    }
+}
+
+enum ReminderDefaults {
+    static func offsets(isExam: Bool) -> [Int] {
+        let key = isExam ? Prefs.reminderOffsetsExam : Prefs.reminderOffsetsTask
+        let stored = UserDefaults.standard.string(forKey: key) ?? ""
+        return parse(stored)
+    }
+
+    static func parse(_ text: String) -> [Int] {
+        text.split(separator: ",").compactMap { Int($0.trimmingCharacters(in: .whitespaces)) }
+    }
+
+    static func format(_ offsets: [Int]) -> String {
+        offsets.sorted(by: >).map(String.init).joined(separator: ",")
+    }
+
+    static var allDayHour: Int {
+        let hour = UserDefaults.standard.integer(forKey: Prefs.allDayReminderHour)
+        return (0...23).contains(hour) ? hour : 9
+    }
+
+    /// "1 day before, 2 hours before"
+    static func describe(_ offsets: [Int]) -> String {
+        guard !offsets.isEmpty else { return "No reminders" }
+        return offsets.sorted(by: >).map(label).joined(separator: ", ")
+    }
+
+    static let choices: [Int] = [0, 30, 60, 120, 360, 1440, 2880, 4320, 10080]
+
+    static func label(_ minutes: Int) -> String {
+        if minutes == 0 { return "At due time" }
+        if minutes < 60 { return "\(minutes) minutes before" }
+        if minutes < 1440 {
+            let hours = minutes / 60
+            return "\(hours) hour\(hours == 1 ? "" : "s") before"
+        }
+        let days = minutes / 1440
+        if days % 7 == 0 {
+            let weeks = days / 7
+            return "\(weeks) week\(weeks == 1 ? "" : "s") before"
+        }
+        return "\(days) day\(days == 1 ? "" : "s") before"
     }
 }

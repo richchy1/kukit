@@ -2,7 +2,7 @@ import Observation
 import SwiftUI
 
 enum AppSection: String, CaseIterable, Identifiable, Hashable {
-    case today, focus, courses, stats, settings
+    case today, focus, tasks, courses, stats, settings, more
 
     var id: String { rawValue }
 
@@ -10,9 +10,11 @@ enum AppSection: String, CaseIterable, Identifiable, Hashable {
         switch self {
         case .today: "Today"
         case .focus: "Focus"
+        case .tasks: "Tasks"
         case .courses: "Courses"
         case .stats: "Stats"
         case .settings: "Settings"
+        case .more: "More"
         }
     }
 
@@ -20,9 +22,11 @@ enum AppSection: String, CaseIterable, Identifiable, Hashable {
         switch self {
         case .today: "sun.max"
         case .focus: "timer"
+        case .tasks: "checklist"
         case .courses: "books.vertical"
         case .stats: "chart.bar.xaxis"
         case .settings: "gearshape"
+        case .more: "ellipsis.circle"
         }
     }
 }

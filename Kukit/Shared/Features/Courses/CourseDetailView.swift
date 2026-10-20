@@ -9,6 +9,22 @@ struct CourseDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var course: Course
     @State private var showingEdit = false
+    @State private var taskEditor: TaskEditor?
+
+    private enum TaskEditor: Identifiable {
+        case new
+        case edit(Assignment)
+        var id: String {
+            switch self {
+            case .new: "new"
+            case .edit(let a): a.id.uuidString
+            }
+        }
+    }
+
+    private var openTasks: [Assignment] {
+        Assignment.sortedByUrgency((course.assignments ?? []).filter { !$0.isDone })
+    }
 
     private var sessions: [StudySession] {
         (course.sessions ?? []).sorted { $0.startedAt > $1.startedAt }
@@ -42,6 +58,32 @@ struct CourseDetailView: View {
                 .controlSize(.large)
                 .tint(course.color)
                 .disabled(course.isArchived || timer.state.isActive)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Open tasks").font(.headline)
+                        Spacer()
+                        Button("Add task", systemImage: "plus") { taskEditor = .new }
+                            .font(.subheadline)
+                            .buttonStyle(.borderless)
+                            .disabled(course.isArchived)
+                    }
+                    if openTasks.isEmpty {
+                        Text("Nothing due for this course.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .card()
+                    } else {
+                        VStack(spacing: 0) {
+                            ForEach(openTasks.prefix(6)) { item in
+                                AssignmentRow(assignment: item, showsCourse: false) { taskEditor = .edit(item) }
+                                    .padding(.vertical, 6)
+                                if item.id != openTasks.prefix(6).last?.id { Divider() }
+                            }
+                        }
+                        .card(padding: 14)
+                    }
+                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
@@ -85,6 +127,12 @@ struct CourseDetailView: View {
         }
                 .sheet(isPresented: $showingEdit) {
             CourseEditorView(course: course, onDelete: deleteCourse)
+        }
+        .sheet(item: $taskEditor) { target in
+            switch target {
+            case .new: AssignmentEditorView(assignment: nil, defaultCourseID: course.id)
+            case .edit(let assignment): AssignmentEditorView(assignment: assignment)
+            }
         }
     }
 

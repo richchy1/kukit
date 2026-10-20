@@ -23,6 +23,8 @@ settings:
     INFOPLIST_KEY_CFBundleDisplayName: Kukit
     INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
     INFOPLIST_KEY_NSHumanReadableCopyright: "© richchy"
+    INFOPLIST_KEY_NSRemindersFullAccessUsageDescription: "Kukit adds a task to Apple Reminders when you turn on “Add to Apple Reminders” for it."
+    INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription: "Kukit adds an exam to your calendar when you turn on “Add to Calendar” for it."
 
 packages:
   KukitCore:
@@ -63,6 +65,7 @@ targets:
       path: Kukit/macOS/Kukit.entitlements
       properties:
         com.apple.security.app-sandbox: true
+        com.apple.security.personal-information.calendars: true
     settings:
       base:
         PRODUCT_NAME: Kukit

@@ -5,8 +5,9 @@ struct AppRootView: View {
     @Environment(AppRouter.self) private var router
     @Environment(TimerController.self) private var timer
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.modelContext) private var context
 
-    private let sections: [AppSection] = [.today, .focus, .courses, .stats]
+    private let sections: [AppSection] = [.today, .focus, .tasks, .courses, .stats]
 
     var body: some View {
         let selection = Binding<AppSection?>(
@@ -25,14 +26,15 @@ struct AppRootView: View {
                 switch router.section {
                 case .today: TodayView()
                 case .focus: FocusView()
+                case .tasks: AssignmentsView()
                 case .courses: CoursesView()
                 case .stats: StatsView()
-                case .settings: SettingsView()
+                case .settings, .more: SettingsView()
                 }
             }
             .id(router.section)
         }
         .frame(minWidth: 860, minHeight: 560)
-        .refreshTimerWhenActive(timer, scenePhase: scenePhase)
+        .refreshTimerWhenActive(timer, scenePhase: scenePhase, context: context)
     }
 }
