@@ -17,6 +17,7 @@
 		177285DA9E7F4220E1475F22 /* EventKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B6856729531A97D5D854B4 /* EventKitService.swift */; };
 		1A1896F01CA1FC831247A000 /* CoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */; };
 		241DD4384BEC15C1FC77209E /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36B56F36BD75D6339C8B19 /* Prefs.swift */; };
+		282421D9FD78E4AC951109D3 /* DataSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463E61AA20F09C0793F125E4 /* DataSettingsSection.swift */; };
 		2D2D10D445501CEE050C57DD /* CourseEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3AEF069B792172A3769DC /* CourseEditorView.swift */; };
 		2EC7B99E03B9AC43E99BCF11 /* PresetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */; };
 		2ED5599ABBD5DA4CFC1FA1E6 /* FocusComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5AF948C015F4667565ECC /* FocusComponents.swift */; };
@@ -35,6 +36,7 @@
 		5AF707B5B0A3BE9DA753B7BE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */; };
 		5F9B4E7DABDACBA38E7FFEBB /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E806A5D8338241D32F5FBDBB /* Theme.swift */; };
 		60D596E8A552C2F80F7E57C4 /* NoteModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432177175C27F891BDC0466A /* NoteModels.swift */; };
+		6CE02CC96921E087D295D90C /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDED1CDD47576D26AA2F504 /* BackupService.swift */; };
 		6E9B29FE3F199C5C4BAD235A /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E806A5D8338241D32F5FBDBB /* Theme.swift */; };
 		70B6ED90794D92D6384B5CD3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23C12EDC4412E94DC819688 /* StatsView.swift */; };
 		715C0DF11921657E556BAB5A /* AssignmentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A31D67B953054C15A0C988E /* AssignmentRow.swift */; };
@@ -48,6 +50,7 @@
 		7F12DBD69C366EDA82B62487 /* MarkdownPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4DCBB1CBE453FF23E8710D /* MarkdownPreview.swift */; };
 		80E61EB7D50C8C56AD67D8FE /* PresetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */; };
 		833D21435678219DFF18EB59 /* KukitCore in Frameworks */ = {isa = PBXBuildFile; productRef = FC8A30B17027050A46B893EB /* KukitCore */; };
+		86BADDF2DC6231C4469DCA0B /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDED1CDD47576D26AA2F504 /* BackupService.swift */; };
 		983563CA819E619FF86BE2D4 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2CE2186682FD97000F687 /* WeekCalendarView.swift */; };
 		9BB7ADA32C767155E7351985 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */; };
 		9C6EA6F795DFE32280C717AF /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D407F732F963B4F81003D1 /* HistoryView.swift */; };
@@ -64,6 +67,7 @@
 		C6B2A2F3EB7940840A08B164 /* GradeEditors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA85A619817149C2C3D18518 /* GradeEditors.swift */; };
 		C9B6AE8D06F5021D61FB171A /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826D3FE46A33D5EC0D726061 /* TodayView.swift */; };
 		CC06051C51FF20631EA98CD0 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D5698FFAF7E0C3F6B07EC8 /* NoteEditorView.swift */; };
+		CC9B69304A63F12C58768401 /* DataSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463E61AA20F09C0793F125E4 /* DataSettingsSection.swift */; };
 		CF979A3CAAAD5979F0B17142 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2CE2186682FD97000F687 /* WeekCalendarView.swift */; };
 		D4EB1B6E8DE275A3410D53AF /* CourseEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3AEF069B792172A3769DC /* CourseEditorView.swift */; };
 		D5C39866FDD969967068A468 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729CBB523E75E85810085A5 /* AppRootView.swift */; };
@@ -111,6 +115,7 @@
 		3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetEditorView.swift; sourceTree = "<group>"; };
 		3DD5AF948C015F4667565ECC /* FocusComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusComponents.swift; sourceTree = "<group>"; };
 		432177175C27F891BDC0466A /* NoteModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModels.swift; sourceTree = "<group>"; };
+		463E61AA20F09C0793F125E4 /* DataSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSettingsSection.swift; sourceTree = "<group>"; };
 		46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerController.swift; sourceTree = "<group>"; };
 		4E26C0F788AFD510BE5CE08C /* KukitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KukitApp.swift; sourceTree = "<group>"; };
 		50F5AD7F18688910EEEBDE0E /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
@@ -135,6 +140,7 @@
 		B6C189EF8594EB1BBE532A8F /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		BE2B248B4C4D7B35340CE470 /* GradeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeModels.swift; sourceTree = "<group>"; };
 		C729CBB523E75E85810085A5 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		CCDED1CDD47576D26AA2F504 /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
 		CE4DCBB1CBE453FF23E8710D /* MarkdownPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPreview.swift; sourceTree = "<group>"; };
 		E4F59DF2E528FB022727960D /* GradesOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesOverviewView.swift; sourceTree = "<group>"; };
 		E609CEA9B1F44E794B9FB50F /* Kukit-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kukit-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -301,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				B6C189EF8594EB1BBE532A8F /* AppRouter.swift */,
+				CCDED1CDD47576D26AA2F504 /* BackupService.swift */,
 				97B6856729531A97D5D854B4 /* EventKitService.swift */,
 				A348969B247A28E5C0F9FF3A /* NotificationService.swift */,
 				259D99BCC638854E9C86A9B8 /* ReminderScheduler.swift */,
@@ -312,6 +319,7 @@
 		C1CB88D85FB134A2E303E87B /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				463E61AA20F09C0793F125E4 /* DataSettingsSection.swift */,
 				315F439D1F526D9C1B5D0A72 /* GradingScalesView.swift */,
 				2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */,
 			);
@@ -508,11 +516,13 @@
 				FE71761F7CE65ABED42BEB11 /* AssignmentEditorView.swift in Sources */,
 				715C0DF11921657E556BAB5A /* AssignmentRow.swift in Sources */,
 				78A733A8CDC26BE0F8AD66CC /* AssignmentsView.swift in Sources */,
+				86BADDF2DC6231C4469DCA0B /* BackupService.swift in Sources */,
 				E9D9FCF595E91EC93473DA32 /* Components.swift in Sources */,
 				BF2D494F9F9501AB65953B94 /* CourseDetailView.swift in Sources */,
 				2D2D10D445501CEE050C57DD /* CourseEditorView.swift in Sources */,
 				D61A710AFABBD077865E86B2 /* CourseGradesView.swift in Sources */,
 				FBB29072C57F37F2EF9750A9 /* CoursesView.swift in Sources */,
+				282421D9FD78E4AC951109D3 /* DataSettingsSection.swift in Sources */,
 				177285DA9E7F4220E1475F22 /* EventKitService.swift in Sources */,
 				7606C3E899C951F8633BFAAF /* FocusComponents.swift in Sources */,
 				B64AED59AB98E1FEA8A74125 /* FocusView.swift in Sources */,
@@ -558,11 +568,13 @@
 				063A6AFDE8A2E99D64776262 /* AssignmentEditorView.swift in Sources */,
 				71F3E684FCE680A5FC51E27A /* AssignmentRow.swift in Sources */,
 				76DE369E4A90400F777AE3BF /* AssignmentsView.swift in Sources */,
+				6CE02CC96921E087D295D90C /* BackupService.swift in Sources */,
 				59FA652529ED7740D49D1BCF /* Components.swift in Sources */,
 				4640A3A5B442248504038D23 /* CourseDetailView.swift in Sources */,
 				D4EB1B6E8DE275A3410D53AF /* CourseEditorView.swift in Sources */,
 				73291F4445B9974CC9CA329C /* CourseGradesView.swift in Sources */,
 				1A1896F01CA1FC831247A000 /* CoursesView.swift in Sources */,
+				CC9B69304A63F12C58768401 /* DataSettingsSection.swift in Sources */,
 				B33BA720496A3C6F810A68B0 /* EventKitService.swift in Sources */,
 				2ED5599ABBD5DA4CFC1FA1E6 /* FocusComponents.swift in Sources */,
 				F4F760C3D337EA25ACA10C7F /* FocusView.swift in Sources */,

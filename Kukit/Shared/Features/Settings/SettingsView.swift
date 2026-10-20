@@ -75,6 +75,8 @@ struct SettingsView: View {
                 Text("Kukit uses notifications to tell you when a focus round or break ends, even when the app is closed.")
             }
 
+            DataSettingsSection()
+
             #if os(macOS)
             Section("Menu bar & login") {
                 Toggle("Show timer in the menu bar", isOn: $showMenuBar)
