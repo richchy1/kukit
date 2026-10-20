@@ -27,7 +27,7 @@ struct GradeCategoryEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                KSection {
                     TextField("Name (e.g. Midterm)", text: $name)
                     HStack {
                         Text("Weight")
@@ -41,7 +41,7 @@ struct GradeCategoryEditorView: View {
                         Text("%").foregroundStyle(.secondary)
                     }
                 }
-                Section {
+                KSection {
                     Picker("How scores combine", selection: $method) {
                         Text("Total points").tag(CategoryMethod.totalPoints)
                         Text("Average of percentages").tag(CategoryMethod.averageOfPercentages)
@@ -52,12 +52,13 @@ struct GradeCategoryEditorView: View {
                          : "Averages each score's percentage, so every score counts equally.")
                 }
                 if category != nil {
-                    Section {
+                    KSection {
                         Button("Delete category…", role: .destructive) { confirmDelete = true }
                     }
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle(category == nil ? "New category" : "Edit category")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
@@ -134,13 +135,13 @@ struct GradeEntryEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                KSection {
                     TextField("Name (e.g. Midterm exam)", text: $name)
                     Picker("Category", selection: $categoryID) {
                         ForEach(course.sortedCategories) { Text($0.name).tag(Optional($0.id)) }
                     }
                 }
-                Section {
+                KSection {
                     HStack {
                         Text("Score")
                         Spacer()
@@ -161,7 +162,7 @@ struct GradeEntryEditorView: View {
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                 }
                 if !openOrLinkedAssignments.isEmpty {
-                    Section {
+                    KSection {
                         Picker("Linked task", selection: $assignmentID) {
                             Text("None").tag(UUID?.none)
                             ForEach(openOrLinkedAssignments) { Text($0.title).tag(Optional($0.id)) }
@@ -169,7 +170,7 @@ struct GradeEntryEditorView: View {
                     }
                 }
                 if entry != nil {
-                    Section {
+                    KSection {
                         Button("Delete score", role: .destructive) {
                             if let entry { context.delete(entry); try? context.save() }
                             dismiss()
@@ -178,6 +179,7 @@ struct GradeEntryEditorView: View {
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle(entry == nil ? "New score" : "Edit score")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

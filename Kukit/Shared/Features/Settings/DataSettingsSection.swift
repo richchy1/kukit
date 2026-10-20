@@ -31,7 +31,7 @@ struct DataSettingsSection: View {
     }
 
     var body: some View {
-        Section {
+        KSection {
             Button("Export backup…", systemImage: "square.and.arrow.up", action: exportBackup)
             Button("Import backup…", systemImage: "square.and.arrow.down") { isImporting = true }
             Menu {
@@ -128,7 +128,7 @@ private struct ImportPreviewView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                KSection {
                     LabeledContent("Made", value: pending.preview.exportedAt.formatted(date: .abbreviated, time: .shortened))
                     ForEach(pending.preview.lines) { line in
                         LabeledContent(line.name) {
@@ -140,7 +140,7 @@ private struct ImportPreviewView: View {
                     Text("In this backup")
                 }
 
-                Section {
+                KSection {
                     Picker("How to import", selection: $mode) {
                         Text("Add what's missing").tag(ImportMode.merge)
                         Text("Replace everything").tag(ImportMode.replace)
@@ -154,6 +154,7 @@ private struct ImportPreviewView: View {
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle("Import backup")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

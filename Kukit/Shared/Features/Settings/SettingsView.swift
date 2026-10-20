@@ -14,6 +14,7 @@ struct SettingsView: View {
     @AppStorage(Prefs.keepScreenAwake) private var keepAwake = true
     @AppStorage(Prefs.showMenuBar) private var showMenuBar = true
     @AppStorage(Prefs.menuBarCountdown) private var menuBarCountdown = true
+    @AppStorage(Prefs.chefHumor) private var chefHumor = true
 
     @Environment(\.openURL) private var openURL
     @Environment(AppRouter.self) private var router
@@ -21,7 +22,7 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            Section("Timer") {
+            KSection("Timer") {
                 Toggle("Start next phase automatically", isOn: $autoStartNext)
                 Stepper(value: $minimumMinutes, in: 0...5) {
                     LabeledContent("Minimum session", value: minimumMinutes == 0 ? "Save everything" : "\(minimumMinutes) min")
@@ -36,13 +37,23 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Goal") {
+            MusicSettingsSection()
+
+            KSection {
+                Toggle("Chef Kukit's jokes", isOn: $chefHumor)
+            } header: {
+                Text("Chef Kukit")
+            } footer: {
+                Text("Turn the kitchen humor off for plain messages. Chef Kukit still keeps you company.")
+            }
+
+            KSection("Goal") {
                 Stepper(value: $goalMinutes, in: 15...600, step: 15) {
                     LabeledContent("Daily focus goal", value: DurationFormat.short(TimeInterval(goalMinutes * 60)))
                 }
             }
 
-            Section("Grades") {
+            KSection("Grades") {
                 NavigationLink {
                     GradingScalesView()
                 } label: {
@@ -50,7 +61,7 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Reminders") {
+            KSection("Reminders") {
                 NavigationLink {
                     ReminderDefaultsView()
                 } label: {
@@ -58,7 +69,7 @@ struct SettingsView: View {
                 }
             }
 
-            Section {
+            KSection {
                 LabeledContent("Alerts", value: statusText)
                 if notificationStatus == .notDetermined {
                     Button("Allow notifications") {
@@ -79,7 +90,7 @@ struct SettingsView: View {
             DataSettingsSection()
 
             #if os(macOS)
-            Section("Menu bar & login") {
+            KSection("Menu bar & login") {
                 Toggle("Show timer in the menu bar", isOn: $showMenuBar)
                 Toggle("Show countdown next to the icon", isOn: $menuBarCountdown)
                     .disabled(!showMenuBar)
@@ -87,7 +98,7 @@ struct SettingsView: View {
             }
             #endif
 
-            Section("About") {
+            KSection("About") {
                 LabeledContent("Kukit", value: version)
                 Button("Show the welcome tour", systemImage: "sparkles") { router.showOnboarding = true }
                 Text("Cook it. Study timer, grades and tasks for university.")
@@ -95,6 +106,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
+            .kukitList()
         .navigationTitle("Settings")
         .task { notificationStatus = await NotificationService.shared.authorizationStatus() }
     }
@@ -131,17 +143,17 @@ struct ReminderDefaultsView: View {
 
     var body: some View {
         Form {
-            Section {
+            KSection {
                 ReminderOffsetPicker(offsets: binding($taskOffsets))
             } header: {
                 Text("Tasks")
             } footer: {
                 Text("Used for every task unless you pick custom timing on it.")
             }
-            Section("Exams") {
+            KSection("Exams") {
                 ReminderOffsetPicker(offsets: binding($examOffsets))
             }
-            Section {
+            KSection {
                 Stepper(value: $morningHour, in: 5...12) {
                     LabeledContent("Morning reminder at", value: "\(morningHour):00")
                 }
@@ -150,6 +162,7 @@ struct ReminderDefaultsView: View {
             }
         }
         .formStyle(.grouped)
+            .kukitList()
         .navigationTitle("Reminder timing")
         .onDisappear { ReminderScheduler.shared.scheduleResync(context) }
     }
@@ -172,7 +185,7 @@ struct PresetsSettingsView: View {
 
     var body: some View {
         List {
-            Section {
+            KSection {
                 ForEach(TimerConfig.builtIns) { config in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(config.name)
@@ -186,7 +199,7 @@ struct PresetsSettingsView: View {
                 Text("Built in")
             }
 
-            Section {
+            KSection {
                 if presets.isEmpty {
                     Text("No custom techniques yet.").foregroundStyle(.secondary)
                 }
@@ -209,6 +222,7 @@ struct PresetsSettingsView: View {
                 Text("Yours")
             }
         }
+        .kukitList()
         .navigationTitle("Techniques")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

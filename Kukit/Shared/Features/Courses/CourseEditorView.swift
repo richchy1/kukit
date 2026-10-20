@@ -47,7 +47,7 @@ struct CourseEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                KSection {
                     TextField("Course name", text: $name)
                     TextField("Code (e.g. MATH201)", text: $code)
                         #if os(iOS)
@@ -56,7 +56,7 @@ struct CourseEditorView: View {
                     TextField("Instructor", text: $instructor)
                 }
 
-                Section("Credits") {
+                KSection("Credits") {
                     Stepper(value: $credits, in: 0...12, step: 0.5) {
                         Text("\(credits.formatted(.number.precision(.fractionLength(0...1)))) credits")
                     }
@@ -67,7 +67,7 @@ struct CourseEditorView: View {
                     }
                 }
 
-                Section("Semester") {
+                KSection("Semester") {
                     Picker("Semester", selection: $semesterID) {
                         Text("None").tag(UUID?.none)
                         ForEach(semesters) { semester in
@@ -82,13 +82,13 @@ struct CourseEditorView: View {
                     }
                 }
 
-                Section("Look") {
+                KSection("Look") {
                     colorGrid
                     symbolGrid
                 }
 
                 if course != nil {
-                    Section {
+                    KSection {
                         Toggle("Archived", isOn: $isArchived)
                         if onDelete != nil {
                             Button("Delete course…", role: .destructive) { confirmDelete = true }
@@ -99,6 +99,7 @@ struct CourseEditorView: View {
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle(course == nil ? "New course" : "Edit course")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

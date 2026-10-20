@@ -31,22 +31,23 @@ struct PresetEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Name") {
+                KSection("Name") {
                     TextField("e.g. Night owl", text: $name)
                 }
-                Section("Durations") {
+                KSection("Durations") {
                     NumberRow(title: "Focus", unit: "min", value: $focus, range: TimerConfig.focusRange)
                     NumberRow(title: "Short break", unit: "min", value: $shortBreak, range: TimerConfig.shortBreakRange)
                     NumberRow(title: "Long break", unit: "min", value: $longBreak, range: TimerConfig.longBreakRange)
                     NumberRow(title: "Long break after", unit: "rounds", value: $rounds, range: TimerConfig.roundsRange)
                 }
-                Section {
+                KSection {
                     Text("\(focus) min focus, then \(shortBreak) min break. After \(rounds) rounds, a \(longBreak) min break.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle(preset == nil ? "New technique" : "Edit technique")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

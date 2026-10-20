@@ -89,7 +89,7 @@ struct OnboardingView: View {
             }
             footer
         }
-        .background(Theme.screenBackground)
+        .kukitScreen()
         #if os(macOS)
         .frame(minWidth: 520, minHeight: 600)
         #endif
@@ -115,20 +115,19 @@ struct OnboardingView: View {
     private var footer: some View {
         HStack {
             if step == .welcome {
-                Button("Skip for now") { onFinish() }.buttonStyle(.borderless)
+                Button("Skip for now") { onFinish() }.buttonStyle(.kukit(.ghost))
             } else {
-                Button("Back") { move(-1) }.buttonStyle(.borderless)
+                Button("Back") { move(-1) }.buttonStyle(.kukit(.ghost))
             }
             Spacer()
             Button(step == .alerts ? "Start cooking" : "Continue") {
                 if step == .alerts { finish() } else { move(1) }
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
+            .buttonStyle(.kukit(.primary))
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 16)
-        .background(.bar)
+        .background(Theme.screenBackground)
     }
 
     private func move(_ delta: Int) {
@@ -140,11 +139,10 @@ struct OnboardingView: View {
 
     private var welcome: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Image(systemName: "flame.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(Theme.accent.gradient)
-            Text("Welcome to Kukit").font(.largeTitle.bold())
-            Text("Cook your semester. A focus timer, your courses, assignments, grades and notes in one place — all stored on this device.")
+            ChefKukit(mood: .ready, size: 128)
+                .frame(maxWidth: .infinity)
+            Text("Welcome to Kukit").font(.kukit(.largeTitle, weight: .heavy))
+            Text("Meet Chef Kukit. Cook your semester: a focus timer, your courses, assignments, grades and notes in one place — all stored on this device.")
                 .font(.title3).foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 10) {
                 bullet("timer", "Time your study sessions per course")
@@ -164,7 +162,7 @@ struct OnboardingView: View {
 
     private var courses: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Your courses").font(.title.bold())
+            Text("Stock the pantry").font(.kukit(.title, weight: .heavy))
             Text("Add what you're taking this semester. Leave extra rows empty.")
                 .foregroundStyle(.secondary)
             TextField("Semester", text: $semesterName)
@@ -195,7 +193,7 @@ struct OnboardingView: View {
     private var grading: some View {
         let scale = scales.first(where: \.isDefault)?.scale ?? .korean45
         return VStack(alignment: .leading, spacing: 16) {
-            Text("Grading").font(.title.bold())
+            Text("How you get graded").font(.kukit(.title, weight: .heavy))
             VStack(alignment: .leading, spacing: 6) {
                 Text("Grading scale: \(scale.name)").font(.headline)
                 Text(scale.bands.sorted { $0.minPercent > $1.minPercent }
@@ -233,7 +231,7 @@ struct OnboardingView: View {
 
     private var focus: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Focus").font(.title.bold())
+            Text("Pick your cooking style").font(.kukit(.title, weight: .heavy))
             Text("Pick a technique to start with. You can switch before every session or make your own.")
                 .foregroundStyle(.secondary)
             ForEach(TimerConfig.builtIns) { config in
@@ -251,7 +249,7 @@ struct OnboardingView: View {
 
     private var alerts: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Stay on track").font(.title.bold())
+            Text("Never miss a timer").font(.kukit(.title, weight: .heavy))
             Text("Kukit can tell you when a focus round or break ends and remind you before assignments are due — even when the app is closed.")
                 .foregroundStyle(.secondary)
             Toggle("Allow notifications", isOn: $wantsAlerts)

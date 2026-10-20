@@ -54,6 +54,18 @@ struct TimerEngineTests {
         #expect(engine.state.endDate == at(55))
     }
 
+    @Test func needsAdvanceOnlyOnceThePhaseTimeIsUp() {
+        var engine = started()
+        #expect(!engine.needsAdvance(now: at(10)))
+        #expect(!engine.needsAdvance(now: at(24, 59)))
+        #expect(engine.needsAdvance(now: at(25)))
+        #expect(engine.needsAdvance(now: at(60)))
+        engine.pause(now: at(10))
+        #expect(!engine.needsAdvance(now: at(500)))            // paused never ends by itself
+        #expect(!TimerEngine().needsAdvance(now: at(0)))        // idle
+        #expect(!started(.stopwatch).needsAdvance(now: at(9_999)))
+    }
+
     @Test func advanceBeforeEndDoesNothing() {
         var engine = started()
         #expect(engine.advance(now: at(24, 59)).isEmpty)

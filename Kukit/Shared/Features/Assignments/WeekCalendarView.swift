@@ -68,9 +68,13 @@ struct WeekCalendarView: View {
                 .padding(8)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .background(
-                    calendar.isDateInToday(day) ? Theme.accent.opacity(0.08) : Theme.cardBackground,
-                    in: RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    calendar.isDateInToday(day) ? Theme.softBackground.opacity(0.6) : Theme.cardBackground,
+                    in: RoundedRectangle(cornerRadius: 14, style: .continuous)
                 )
+                .overlay {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(calendar.isDateInToday(day) ? Theme.accent : Theme.border, lineWidth: calendar.isDateInToday(day) ? 1.5 : 1)
+                }
             }
         }
         .padding(.horizontal)
@@ -80,7 +84,7 @@ struct WeekCalendarView: View {
     private var list: some View {
         List {
             ForEach(days, id: \.self) { day in
-                Section {
+                KSection {
                     let dayItems = items(on: day)
                     if dayItems.isEmpty {
                         Text("Nothing due").font(.footnote).foregroundStyle(.tertiary)
@@ -93,6 +97,7 @@ struct WeekCalendarView: View {
                 }
             }
         }
+        .kukitList()
     }
 
     private func dayHeader(_ day: Date) -> some View {
@@ -110,7 +115,7 @@ struct WeekCalendarView: View {
         Button { onSelect(item) } label: {
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.title)
-                    .font(.caption.weight(.medium))
+                    .font(.kukit(.caption, weight: .bold))
                     .strikethrough(item.isDone)
                     .lineLimit(2)
                 if item.hasDueTime, let due = item.dueDate {
@@ -119,8 +124,11 @@ struct WeekCalendarView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(6)
-            .background((item.course?.color ?? .secondary).opacity(item.isDone ? 0.12 : 0.25),
-                        in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .background((item.course?.color ?? .secondary).opacity(item.isDone ? 0.12 : 0.22),
+                        in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .overlay(alignment: .leading) {
+                Capsule().fill(item.isDone ? Theme.basil : (item.course?.color ?? Color.secondary)).frame(width: 3).padding(.vertical, 4)
+            }
         }
         .buttonStyle(.plain)
     }

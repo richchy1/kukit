@@ -37,13 +37,18 @@ struct NoteEditorView: View {
     }
 
     var body: some View {
+        // The page sits on the cream "desk" like a sheet of paper.
         VStack(spacing: 0) {
             header
-            Divider()
-            if mode != .preview { formattingBar; Divider() }
+            Divider().opacity(0.6)
+            if mode != .preview { formattingBar; Divider().opacity(0.6) }
             content
         }
-        .background(Theme.screenBackground)
+        .background(Theme.cardBackground, in: RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous))
+        .overlay { RoundedRectangle(cornerRadius: Theme.cardRadius, style: .continuous).strokeBorder(Theme.border) }
+        .shadow(color: .black.opacity(0.05), radius: 8, y: 2)
+        .padding(12)
+        .kukitScreen()
         .navigationTitle(note.displayTitle)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -75,7 +80,7 @@ struct NoteEditorView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             TextField("Title", text: $note.title)
-                .font(.title2.weight(.bold))
+                .font(.system(.title2, design: .serif, weight: .bold))
                 .textFieldStyle(.plain)
                 .onChange(of: note.title) { note.touch() }
             HStack(spacing: 10) {
@@ -201,7 +206,8 @@ struct NoteEditorView: View {
 
     private var editor: some View {
         TextEditor(text: $note.markdownBody, selection: $selection)
-            .font(.system(.body, design: .default))
+            .font(.system(.body, design: .serif))
+            .lineSpacing(3)
             .scrollContentBackground(.hidden)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -220,6 +226,7 @@ struct NoteEditorView: View {
                 },
                 onOpenNote: openNote(titled:)
             )
+            .fontDesign(.serif)
             .padding()
             .frame(maxWidth: 720, alignment: .leading)
             .frame(maxWidth: .infinity)
@@ -316,7 +323,8 @@ struct LinkedTasksPicker: View {
                     .buttonStyle(.plain)
                 }
             }
-            .navigationTitle("Link tasks")
+            .kukitList()
+        .navigationTitle("Link tasks")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif

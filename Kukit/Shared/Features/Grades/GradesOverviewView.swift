@@ -44,7 +44,7 @@ struct GradesOverviewView: View {
 
     var body: some View {
         List {
-            Section {
+            KSection {
                 HStack(spacing: 12) {
                     gpaTile(title: "GPA so far", value: GPACalculator.gpa(gpaInputs(courses, projected: false)))
                     gpaTile(title: "Projected GPA", value: GPACalculator.gpa(gpaInputs(courses, projected: true)))
@@ -56,13 +56,13 @@ struct GradesOverviewView: View {
             }
 
             if courses.isEmpty {
-                EmptyStateView(systemImage: "graduationcap", title: "No courses yet",
+                EmptyStateView(mood: .idle, title: "No courses yet",
                                message: "Add courses, then set up their grading to see your GPA here.")
                     .listRowBackground(Color.clear)
             }
 
             ForEach(groups) { group in
-                Section {
+                KSection {
                     ForEach(group.courses) { course in
                         NavigationLink(value: course) { row(course) }
                     }
@@ -76,16 +76,17 @@ struct GradesOverviewView: View {
                 }
             }
         }
+        .kukitList()
         .navigationTitle("Grades")
         .navigationDestination(for: Course.self) { CourseGradesView(course: $0) }
     }
 
     private func gpaTile(title: String, value: Double?) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(title).font(.kukit(.caption, weight: .semibold)).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text(gpaText(value)).font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit()
-                Text("/ \(GradeFormat.number(defaultScale.gpaMax))").font(.footnote).foregroundStyle(.secondary)
+                Text(gpaText(value)).font(.system(size: 32, weight: .heavy, design: .rounded)).monospacedDigit()
+                Text("/ \(GradeFormat.number(defaultScale.gpaMax))").font(.kukit(.footnote, weight: .semibold)).foregroundStyle(.secondary)
             }
         }
         .card()

@@ -18,18 +18,37 @@ final class TimerController {
     /// "18:42" while a timer is active, refreshed once per second. Drives the Mac menu bar label,
     /// which must not use a TimelineView (that makes the status item re-layout in a loop).
     private(set) var clockText = ""
+    /// Set when a focus session just finished (or was ended by the user); the UI celebrates it.
+    private(set) var completion: SessionCompletion?
+    /// The technique of the most recent session, so "Cook again" can repeat it.
+    private(set) var lastStartedConfig: TimerConfig?
 
     @ObservationIgnored private let modelContext: ModelContext
+    @ObservationIgnored let music: FocusMusicController
+    /// False in tests, so they never schedule real notifications or trigger the permission prompt.
+    @ObservationIgnored private let schedulesNotifications: Bool
+    @ObservationIgnored private var lastSnapshot = TimerSnapshot.idle
+    @ObservationIgnored private var isRestoring = false
     @ObservationIgnored private let defaults = UserDefaults.standard
     @ObservationIgnored private let notifications = NotificationService.shared
     @ObservationIgnored private var tickTask: Task<Void, Never>?
     @ObservationIgnored private var activity: NSObjectProtocol?
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, music: FocusMusicController, schedulesNotifications: Bool = true) {
         self.modelContext = modelContext
+        self.music = music
+        self.schedulesNotifications = schedulesNotifications
         selectedPresetID = defaults.string(forKey: Prefs.lastPresetID) ?? TimerConfig.classic.id
         selectedCourseID = defaults.string(forKey: Prefs.lastCourseID).flatMap(UUID.init(uuidString:))
+        music.isFocusRunning = { [weak self] in
+            guard let state = self?.engine.state else { return false }
+            return state.status == .running && state.phase == .focus
+        }
+        // A timer restored from a previous launch never auto-starts the music.
+        isRestoring = true
         restore()
+        isRestoring = false
+        lastSnapshot = TimerSnapshot(engine.state)
     }
 
     var state: TimerState { engine.state }
@@ -58,26 +77,50 @@ final class TimerController {
         refreshOptions()
         let context = TimerContext(courseID: courseID, assignmentID: selectedAssignmentID)
         selectedAssignmentID = nil
+        lastStartedConfig = config
         let events = engine.start(config: config, context: context, now: .now)
         commit(events)
-        Task { await notifications.requestAuthorizationIfNeeded(); syncAlerts() }
+        if schedulesNotifications {
+            Task { await notifications.requestAuthorizationIfNeeded(); syncAlerts() }
+        }
     }
 
     func pause() { refreshOptions(); commit(engine.pause(now: .now)) }
     func resume() { refreshOptions(); commit(engine.resume(now: .now)) }
     func skip() { refreshOptions(); commit(engine.skip(now: .now)) }
-    func stop() { refreshOptions(); commit(engine.stop(now: .now)) }
     func startNext() { refreshOptions(); commit(engine.startNext(now: .now)) }
 
+    /// Ends the session, keeping the focus time so far, and celebrates it.
+    func stop() { refreshOptions(); commit(engine.stop(now: .now), announce: true) }
+
+    /// Cancels the session without saving anything.
     func discard() {
         engine.discard()
         commit([])
     }
 
+    func dismissCompletion() { completion = nil }
+
+    /// Starts another session with the same course and technique as the one that just ended.
+    func cookAgain() {
+        completion = nil
+        switch engine.state.status {
+        case .idle:
+            start(config: lastStartedConfig ?? .classic)
+        case .awaitingStart where engine.state.phase.isBreak:
+            skip()          // skip the waiting break…
+            startNext()     // …and start the next focus round
+        case .running where engine.state.phase.isBreak:
+            skip()          // skipping a running break starts the next focus round
+        default:
+            break
+        }
+    }
+
     /// Call when the app returns to the foreground or the Mac wakes.
     func refresh() {
         refreshOptions()
-        commit(engine.advance(now: .now))
+        commit(engine.advance(now: .now), announce: true)
     }
 
     // MARK: Internals
@@ -100,10 +143,20 @@ final class TimerController {
     }
 
     /// Applies the effects of a transition and keeps everything derived in sync.
-    private func commit(_ events: [TimerEvent]) {
+    private func commit(_ events: [TimerEvent], announce: Bool = false) {
         for event in events {
-            if case .focusRecorded(let record) = event { save(record) }
+            if case .focusRecorded(let record) = event {
+                save(record)
+                if announce {
+                    completion = SessionCompletion(
+                        seconds: record.focusSeconds, courseID: record.context.courseID,
+                        presetName: record.presetName, endedAt: record.endedAt
+                    )
+                    Haptics.play(.success)
+                }
+            }
         }
+        updateMusic()
         persist()
         syncAlerts()
         updateTicking()
@@ -123,6 +176,15 @@ final class TimerController {
         )
         modelContext.insert(session)
         try? modelContext.save()
+    }
+
+    /// Keeps the focus music in step with the timer: it plays with focus time only.
+    private func updateMusic() {
+        let current = TimerSnapshot(engine.state)
+        if isRestoring { lastSnapshot = current; return }
+        let action = FocusMusic.action(from: lastSnapshot, to: current, policy: music.policy)
+        lastSnapshot = current
+        music.apply(action)
     }
 
     private func refreshClockText(at now: Date = .now) {
@@ -147,6 +209,7 @@ final class TimerController {
     }
 
     private func syncAlerts() {
+        guard schedulesNotifications else { return }
         let config = engine.state.config
         let items = engine.pendingAlerts(now: .now).map { alert in
             let text = AlertText.make(for: alert, config: config)
@@ -167,8 +230,13 @@ final class TimerController {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .milliseconds(500))
                 guard let self, !Task.isCancelled else { return }
-                let events = self.engine.advance(now: .now)
-                if !events.isEmpty { self.commit(events) } else { self.refreshClockText() }
+                // Only touch `engine` when a phase really ended: calling a mutating method on an
+                // observed property notifies every view reading the timer, twice a second.
+                if self.engine.needsAdvance(now: .now) {
+                    self.commit(self.engine.advance(now: .now), announce: true)
+                } else {
+                    self.refreshClockText()
+                }
             }
         }
     }
@@ -191,15 +259,25 @@ final class TimerController {
     }
 }
 
+/// What a finished focus session looks like to the UI.
+struct SessionCompletion: Identifiable, Equatable {
+    let id = UUID()
+    var seconds: TimeInterval
+    var courseID: UUID?
+    var presetName: String
+    var endedAt: Date
+}
+
 enum AlertText {
     static func make(for alert: PhaseAlert, config: TimerConfig) -> (title: String, body: String) {
+        let seed = Int(alert.date.timeIntervalSince1970 / 60)
         switch (alert.endingPhase, alert.upcomingPhase) {
         case (.focus, .longBreak):
-            return ("Done cooking", "Great round! Take a \(config.longBreakMinutes)-minute break.")
+            return (Chef.line(.sessionComplete, seed: seed), "Take a \(config.longBreakMinutes)-minute break. You earned it.")
         case (.focus, _):
-            return ("Done cooking", "Nice work. Take a \(config.shortBreakMinutes)-minute break.")
+            return (Chef.line(.sessionComplete, seed: seed), "Take a \(config.shortBreakMinutes)-minute break.")
         default:
-            return ("Break's over", "Ready to cook the next round?")
+            return ("Break's over", Chef.line(.sessionStart, seed: seed))
         }
     }
 }

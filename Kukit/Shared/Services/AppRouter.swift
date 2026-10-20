@@ -39,6 +39,8 @@ final class AppRouter {
     /// Launch with `-startSection stats` (any section name) to open straight onto a screen.
     /// Set to show the welcome flow (first launch, or from Settings).
     var showOnboarding = false
+    /// A note another screen wants opened (set by a course, consumed by Notes).
+    var pendingNoteID: UUID?
 
     var section: AppSection = AppSection(rawValue: UserDefaults.standard.string(forKey: "startSection") ?? "") ?? .today
 }

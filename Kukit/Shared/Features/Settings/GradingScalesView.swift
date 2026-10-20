@@ -10,7 +10,7 @@ struct GradingScalesView: View {
 
     var body: some View {
         List {
-            Section {
+            KSection {
                 ForEach(scales) { scale in
                     Button { editing = scale } label: {
                         HStack {
@@ -38,6 +38,7 @@ struct GradingScalesView: View {
                 Text("A course uses the default scale unless you choose another one in the course's settings.")
             }
         }
+        .kukitList()
         .navigationTitle("Grading scales")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -100,7 +101,7 @@ struct GradeScaleEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                KSection {
                     TextField("Scale name", text: $draft.name)
                     HStack {
                         Text("GPA maximum")
@@ -119,7 +120,7 @@ struct GradeScaleEditorView: View {
                     Text("Rounding is applied to a course's percent before looking up its letter.")
                 }
 
-                Section {
+                KSection {
                     ForEach($draft.bands) { $band in
                         HStack(spacing: 8) {
                             TextField("%", value: $band.minPercent, format: .number)
@@ -158,7 +159,7 @@ struct GradeScaleEditorView: View {
                     Text("A percent gets the highest band whose “From %” it reaches. The lowest band must start at 0.")
                 }
 
-                Section("Try it") {
+                KSection("Try it") {
                     HStack {
                         TextField("Percent", text: $previewText)
                             .frame(width: 80)
@@ -171,7 +172,7 @@ struct GradeScaleEditorView: View {
                 }
 
                 if !issues.isEmpty {
-                    Section {
+                    KSection {
                         ForEach(Array(issues.enumerated()), id: \.offset) { _, issue in
                             Label(issue.message, systemImage: "exclamationmark.triangle.fill")
                                 .font(.footnote).foregroundStyle(.orange)
@@ -179,7 +180,7 @@ struct GradeScaleEditorView: View {
                     }
                 }
 
-                Section {
+                KSection {
                     Toggle("Use as the default scale", isOn: $makeDefault)
                         .disabled(model.isDefault)
                     if canDelete {
@@ -194,6 +195,7 @@ struct GradeScaleEditorView: View {
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle("Edit scale")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

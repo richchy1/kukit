@@ -11,7 +11,7 @@ struct MenuBarLabel: View {
     var body: some View {
         let state = timer.state
         HStack(spacing: 4) {
-            Image(systemName: state.isActive && state.phase.isBreak ? "cup.and.saucer.fill" : "timer")
+            Image(systemName: state.isActive && state.phase.isBreak ? "cup.and.saucer.fill" : "flame.fill")
             if state.isActive && showCountdown {
                 Text(timer.clockText).monospacedDigit()
             }
@@ -22,12 +22,14 @@ struct MenuBarLabel: View {
 /// The popover that opens from the menu bar icon.
 struct MenuBarTimerView: View {
     @Environment(TimerController.self) private var timer
+    @Environment(FocusMusicController.self) private var music
     @Environment(AppRouter.self) private var router
     @Environment(\.openWindow) private var openWindow
 
     @Query(sort: \Course.name) private var allCourses: [Course]
     @Query(sort: [SortDescriptor(\TimerPreset.sortOrder), SortDescriptor(\TimerPreset.createdAt)])
     private var customPresets: [TimerPreset]
+    @State private var confirmCancel = false
 
     private var courses: [Course] { allCourses.filter { !$0.isArchived } }
     private var state: TimerState { timer.state }
@@ -42,51 +44,45 @@ struct MenuBarTimerView: View {
 
     var body: some View {
         VStack(spacing: 14) {
-            TimerRingView(idleConfig: selectedConfig, courseColor: activeCourse?.color, digitSize: 38, lineWidth: 10)
-                .frame(width: 170, height: 170)
+            HStack(spacing: 8) {
+                TimelineView(.periodic(from: .now, by: 2)) { context in
+                    ChefKukit(mood: state.chefMood(at: context.date), size: 40)
+                }
+                Text("Kukit").font(.kukit(.title3, weight: .heavy))
+                Spacer()
+            }
+
+            TimerRingView(idleConfig: selectedConfig, courseColor: activeCourse?.color, digitSize: 40, lineWidth: 11)
+                .frame(width: 180, height: 180)
 
             if state.isActive {
                 if let course = activeCourse {
-                    Text(course.name).font(.subheadline.weight(.medium))
+                    Chip(text: course.name, systemImage: course.symbolName, tint: course.color)
                 }
-                TimerControls { timer.discard() }
+                TimerControls { confirmCancel = true }
+                if music.isEnabled { MusicPill() }
             } else if courses.isEmpty {
-                Text("Add a course in Kukit to start tracking.")
-                    .font(.subheadline)
+                Text("Add a course in Kukit to start cooking.")
+                    .font(.kukit(.subheadline, weight: .medium))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             } else {
                 CoursePickerMenu(courses: courses, selectedID: timer.selectedCourseID) { timer.selectCourse($0) }
-
-                Menu {
-                    ForEach(configs) { config in
-                        Button { timer.selectPreset(config) } label: {
-                            if config.id == selectedConfig.id {
-                                Label("\(config.name) · \(config.summary)", systemImage: "checkmark")
-                            } else {
-                                Text("\(config.name) · \(config.summary)")
-                            }
-                        }
-                    }
-                } label: {
-                    Label("\(selectedConfig.name) · \(selectedConfig.summary)", systemImage: "slider.horizontal.3")
-                        .frame(maxWidth: .infinity)
-                }
-                .controlSize(.large)
+                TechniqueMenu(configs: configs, selected: selectedConfig) { timer.selectPreset($0) }
 
                 Button {
                     timer.start(config: selectedConfig)
                 } label: {
-                    Label(selectedConfig.kind == .stopwatch ? "Start stopwatch" : "Start focus", systemImage: "play.fill")
+                    Label(selectedConfig.kind == .stopwatch ? "Start Stopwatch" : "Start Cooking", systemImage: "flame.fill")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .tint(activeCourse?.color ?? Theme.accent)
+                .buttonStyle(.kukit(.primary))
                 .disabled(activeCourse == nil)
+
+                if music.isEnabled { MusicPill() }
             }
 
-            Divider()
+            Divider().opacity(0.6)
 
             HStack {
                 Button("Open Kukit") {
@@ -97,10 +93,19 @@ struct MenuBarTimerView: View {
                 Button("Quit") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")
             }
-            .buttonStyle(.link)
-            .font(.callout)
+            .buttonStyle(.kukit(.ghost))
         }
         .padding(16)
-        .frame(width: 300)
+        .frame(width: 320)
+        .background(Theme.screenBackground)
+        .fontDesign(.rounded)
+        .foregroundStyle(Theme.ink)
+        .tint(Theme.accent)
+        .confirmationDialog("Cancel this session?", isPresented: $confirmCancel, titleVisibility: .visible) {
+            Button("Cancel session", role: .destructive) { timer.discard() }
+            Button("Keep cooking", role: .cancel) {}
+        } message: {
+            Text("The time you've focused so far won't be saved.")
+        }
     }
 }

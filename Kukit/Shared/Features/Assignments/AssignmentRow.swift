@@ -40,6 +40,26 @@ extension Assignment {
     }
 }
 
+/// The deadline label: urgency by icon and wording as well as color, so color is never the only cue.
+struct DueChip: View {
+    var assignment: Assignment
+
+    var body: some View {
+        if assignment.isDone {
+            Chip(text: "Done", systemImage: "checkmark.circle.fill", tint: Theme.basilText)
+        } else if let due = assignment.dueDescription {
+            switch assignment.dueBucket {
+            case .overdue:
+                Chip(text: "Overdue · \(due)", systemImage: "exclamationmark.circle.fill", tint: Theme.accent, filled: true)
+            case .today:
+                Chip(text: due, systemImage: "clock.fill", tint: Theme.butter, filled: true, textColor: Color(hex: "3A2E00"))
+            default:
+                Chip(text: due, systemImage: "calendar", tint: Theme.ink.opacity(0.7))
+            }
+        }
+    }
+}
+
 struct AssignmentRow: View {
     @Environment(\.modelContext) private var context
     @Environment(TimerController.self) private var timer
@@ -51,32 +71,33 @@ struct AssignmentRow: View {
     private var tint: Color { assignment.course?.color ?? Theme.accent }
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: .top, spacing: 12) {
             Button {
                 AssignmentActions.setDone(assignment, !assignment.isDone, context: context)
             } label: {
                 Image(systemName: assignment.isDone ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(assignment.isDone ? tint : Color.secondary)
+                    .font(.system(size: 24))
+                    .foregroundStyle(assignment.isDone ? Theme.basil : tint.opacity(0.85))
+                    .symbolEffect(.bounce, value: assignment.isDone)
+                    .frame(width: 30, height: 30)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .accessibilityLabel(assignment.isDone ? "Mark not done" : "Mark done")
 
             Button(action: onEdit) {
-                HStack(spacing: 8) {
-                    VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .top, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text(assignment.title)
-                            .font(.body.weight(.medium))
+                            .font(.kukit(.body, weight: .bold))
                             .strikethrough(assignment.isDone)
-                            .foregroundStyle(assignment.isDone ? .secondary : .primary)
+                            .foregroundStyle(assignment.isDone ? Color.secondary : Theme.ink)
                             .multilineTextAlignment(.leading)
                         subtitle
                     }
                     Spacer(minLength: 4)
                     if assignment.priority == .high && !assignment.isDone {
-                        Image(systemName: "flag.fill").font(.caption).foregroundStyle(.orange)
-                            .accessibilityLabel("High priority")
+                        Chip(text: "High", systemImage: "flag.fill", tint: Theme.accentText)
                     }
                 }
                 .contentShape(Rectangle())
@@ -84,10 +105,11 @@ struct AssignmentRow: View {
             .buttonStyle(.plain)
         }
         .padding(.vertical, 2)
+        .hoverHighlight()
         .contextMenu {
             Button("Edit", systemImage: "pencil", action: onEdit)
             if !assignment.isDone, assignment.course != nil {
-                Button("Focus on this", systemImage: "timer") { focus() }
+                Button("Cook this", systemImage: "flame") { focus() }
             }
             Button(assignment.isDone ? "Mark not done" : "Mark done", systemImage: "checkmark.circle") {
                 AssignmentActions.setDone(assignment, !assignment.isDone, context: context)
@@ -100,20 +122,17 @@ struct AssignmentRow: View {
 
     private var subtitle: some View {
         HStack(spacing: 6) {
+            Image(systemName: assignment.type.systemImage)
+                .imageScale(.small)
+                .foregroundStyle(tint)
             if showsCourse, let course = assignment.course {
-                Circle().fill(course.color).frame(width: 8, height: 8)
-                Text(course.name)
+                Text(course.name).foregroundStyle(.secondary).lineLimit(1)
+            } else {
+                Text(assignment.type.title).foregroundStyle(.secondary)
             }
-            Image(systemName: assignment.type.systemImage).imageScale(.small)
-            if let due = assignment.dueDescription {
-                Text("· \(due)")
-                    .foregroundStyle(assignment.isOverdue ? Color.red : Color.secondary)
-                    .fontWeight(assignment.isOverdue ? .semibold : .regular)
-            }
+            DueChip(assignment: assignment)
         }
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .lineLimit(1)
+        .font(.kukit(.caption, weight: .semibold))
         .accessibilityElement(children: .combine)
     }
 

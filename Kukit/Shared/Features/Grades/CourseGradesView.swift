@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Charts
 import KukitCore
 
 enum GradeFormat {
@@ -13,7 +14,7 @@ enum GradeFormat {
     }
 }
 
-/// Weighted categories, scores, the current/projected grade and the "what do I need?" calculator.
+/// Weighted categories, scores, the current/projected grade and the "what do I need?" answer.
 struct CourseGradesView: View {
     @Environment(\.modelContext) private var context
     @Bindable var course: Course
@@ -48,33 +49,35 @@ struct CourseGradesView: View {
         return categories.filter { !$0.hasGradedEntries }.max { $0.weight < $1.weight } ?? categories.last
     }
 
+    private static let cardInsets = EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)
+
     var body: some View {
         List {
-            Section {
-                summaryCards
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-            }
-
-            if !categories.isEmpty, abs(summary.totalWeight - 100) > 0.001 {
-                Section {
-                    Label("Weights add up to \(GradeFormat.number(summary.totalWeight))%, not 100%. Grades are scaled to match.",
-                          systemImage: "exclamationmark.triangle.fill")
-                        .font(.footnote)
-                        .foregroundStyle(.orange)
-                }
-            }
-
             if categories.isEmpty {
                 setupSection
             } else {
+                clearRow { finalAnswerCard }
+                clearRow { summaryCards }
+                clearRow { breakdownCard }
+
+                if abs(summary.totalWeight - 100) > 0.001 {
+                    KSection {
+                        Label("Weights add up to \(GradeFormat.number(summary.totalWeight))%, not 100%. Grades are scaled to match.",
+                              systemImage: "exclamationmark.triangle.fill")
+                            .font(.kukit(.footnote, weight: .semibold))
+                            .foregroundStyle(Theme.accentText)
+                    }
+                }
+
                 ForEach(categories) { category in categorySection(category) }
-                whatIfSection
-                Section {
+                planSection
+                KSection {
                     Button("Add category", systemImage: "plus") { sheet = .newCategory }
+                        .buttonStyle(.kukit(.ghost))
                 }
             }
         }
+        .kukitList()
         .navigationTitle("Grades")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -96,48 +99,213 @@ struct CourseGradesView: View {
         }
     }
 
-    // MARK: Summary
+    /// A list row with no row chrome, so a card can stand on its own.
+    private func clearRow<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+        content()
+            .listRowInsets(Self.cardInsets)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+    }
+
+    // MARK: "What do I need on the final?"
+
+    private var finalAnswerCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Label("What do I need on the final?", systemImage: "scope")
+                .font(.kukit(.subheadline, weight: .heavy))
+                .foregroundStyle(Theme.accentText)
+
+            if let target = solveCategory {
+                let result = GradeCalculator.requiredPercent(
+                    target: course.targetPercent, in: target.id, categories: course.categoryInputs
+                )
+                answer(result, categoryName: target.name)
+
+                Divider().opacity(0.6)
+
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: 14) { targetControls; solveControl(target) }
+                    VStack(alignment: .leading, spacing: 10) { targetControls; solveControl(target) }
+                }
+            }
+        }
+        .card(padding: 18, tone: .accent)
+        .accessibilityElement(children: .contain)
+    }
+
+    @ViewBuilder
+    private func answer(_ result: RequiredScore, categoryName: String) -> some View {
+        let targetBand = scale.band(for: course.targetPercent)
+        let targetText = "\(GradeFormat.percent(course.targetPercent))\(targetBand.map { " (\($0.label))" } ?? "")"
+        switch result {
+        case .needs(let value):
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                Text(GradeFormat.percent(value))
+                    .font(.system(size: 52, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Theme.accent)
+                    .monospacedDigit()
+                    .minimumScaleFactor(0.6)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("on \(categoryName)").font(.kukit(.headline, weight: .heavy))
+                    Text("to finish with \(targetText)").font(.kukit(.subheadline, weight: .medium)).foregroundStyle(.secondary)
+                }
+            }
+            .accessibilityElement(children: .combine)
+        case .secured:
+            Label {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Already in the bag").font(.kukit(.headline, weight: .heavy))
+                    Text("You reach \(targetText) even with 0% on \(categoryName).")
+                        .font(.kukit(.subheadline, weight: .medium)).foregroundStyle(.secondary)
+                }
+            } icon: {
+                Image(systemName: "checkmark.seal.fill").font(.title).foregroundStyle(Theme.basil)
+            }
+        case .unreachable(let best):
+            Label {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Out of reach for \(targetText)").font(.kukit(.headline, weight: .heavy))
+                    Text("Even 100% on \(categoryName) gives at most \(GradeFormat.percent(best)).")
+                        .font(.kukit(.subheadline, weight: .medium)).foregroundStyle(.secondary)
+                }
+            } icon: {
+                Image(systemName: "exclamationmark.triangle.fill").font(.title).foregroundStyle(Theme.accent)
+            }
+        case .noWeight:
+            Text("\(categoryName) has no weight, so it can't change your grade.")
+                .font(.kukit(.subheadline, weight: .medium)).foregroundStyle(.secondary)
+        case .noData:
+            Text("Add scores (or guesses below) for the other categories and the answer shows up here.")
+                .font(.kukit(.subheadline, weight: .medium)).foregroundStyle(.secondary)
+        }
+    }
+
+    private var targetControls: some View {
+        HStack(spacing: 8) {
+            Text("Target").font(.kukit(.subheadline, weight: .bold))
+            Stepper(value: $course.targetPercent, in: 0...100, step: 0.5) {
+                Text(GradeFormat.percent(course.targetPercent)).font(.kukit(.subheadline, weight: .heavy)).monospacedDigit()
+            }
+            .fixedSize()
+            Menu {
+                ForEach(scale.bands.sorted { $0.minPercent > $1.minPercent }) { band in
+                    Button("\(band.label) · \(GradeFormat.number(band.minPercent))%") {
+                        course.targetPercent = band.minPercent
+                    }
+                }
+            } label: {
+                Label(scale.band(for: course.targetPercent)?.label ?? "Grade", systemImage: "target")
+            }
+            .menuStyle(.button)
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+        }
+    }
+
+    private func solveControl(_ target: GradeCategory) -> some View {
+        HStack(spacing: 8) {
+            Text("Solve for").font(.kukit(.subheadline, weight: .bold))
+            Picker("Solve for", selection: Binding(get: { target.id }, set: { solveCategoryID = $0 })) {
+                ForEach(categories) { Text($0.name).tag($0.id) }
+            }
+            .labelsHidden()
+            .fixedSize()
+        }
+    }
+
+    // MARK: Summary & chart
 
     private var summaryCards: some View {
         let band = summary.currentPercent.flatMap { scale.band(for: $0) }
         let projectedBand = summary.projectedPercent.flatMap { scale.band(for: $0) }
-        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 12)], spacing: 12) {
-            gradeTile(title: "Now", percent: summary.currentPercent, band: band)
-            gradeTile(title: "Projected", percent: summary.projectedPercent, band: projectedBand)
-            StatTile(title: "Locked in", value: "\(GradeFormat.number(summary.lockedInPoints)) pts")
+        return VStack(spacing: 12) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 110), spacing: 12)], spacing: 12) {
+                gradeTile(title: "Now", percent: summary.currentPercent, band: band)
+                gradeTile(title: "Projected", percent: summary.projectedPercent, band: projectedBand)
+                StatTile(title: "Locked in", value: "\(GradeFormat.number(summary.lockedInPoints)) pts", systemImage: "lock.fill")
+            }
+            if let best = summary.bestCasePercent, let worst = summary.worstCasePercent {
+                HStack(spacing: 12) {
+                    StatTile(title: "Best case", value: GradeFormat.percent(best), systemImage: "arrow.up.right", tint: Theme.basilText)
+                    StatTile(title: "Worst case", value: GradeFormat.percent(worst), systemImage: "arrow.down.right", tint: Theme.accentText)
+                }
+            }
         }
-        .padding(.vertical, 4)
     }
 
     private func gradeTile(title: String, percent: Double?, band: GradeBand?) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(title).font(.kukit(.caption, weight: .semibold)).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(GradeFormat.percent(percent))
-                    .font(.title2.weight(.semibold)).monospacedDigit()
+                    .font(.kukit(.title2, weight: .heavy)).monospacedDigit()
                     .minimumScaleFactor(0.7).lineLimit(1)
                 if let band {
-                    Text(band.label)
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(course.color)
+                    Text(band.label).font(.kukit(.headline, weight: .heavy)).foregroundStyle(course.color)
                 }
             }
             if let band {
                 Text("\(GradeFormat.number(band.gpaPoints)) / \(GradeFormat.number(scale.gpaMax))")
-                    .font(.caption2).foregroundStyle(.secondary)
+                    .font(.kukit(.caption2, weight: .semibold)).foregroundStyle(.secondary)
             }
         }
         .card(padding: 14)
         .accessibilityElement(children: .combine)
     }
 
+    private struct Slice: Identifiable {
+        enum Kind: String { case earned = "Earned", lost = "Lost", pending = "Still to cook" }
+        var category: String
+        var kind: Kind
+        var points: Double
+        var id: String { category + kind.rawValue }
+    }
+
+    /// Where the 100 points come from: earned, lost, or still on the stove, per category.
+    private var slices: [Slice] {
+        let total = summary.totalWeight
+        guard total > 0 else { return [] }
+        var result: [Slice] = []
+        for category in categories where category.weight > 0 {
+            let possible = category.weight * 100 / total
+            if let graded = category.gradedPercent {
+                let earned = possible * min(max(graded, 0), 100) / 100
+                result.append(Slice(category: category.name, kind: .earned, points: earned))
+                result.append(Slice(category: category.name, kind: .lost, points: possible - earned))
+            } else {
+                result.append(Slice(category: category.name, kind: .pending, points: possible))
+            }
+        }
+        return result
+    }
+
+    private var breakdownCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionTitle("Where your points come from", systemImage: "chart.bar.xaxis")
+            Chart(slices) { slice in
+                BarMark(x: .value("Points", slice.points), y: .value("Category", slice.category))
+                    .foregroundStyle(by: .value("Status", slice.kind.rawValue))
+                    .cornerRadius(4)
+            }
+            .chartForegroundStyleScale([
+                Slice.Kind.earned.rawValue: Theme.basil,
+                Slice.Kind.lost.rawValue: Theme.accent.opacity(0.35),
+                Slice.Kind.pending.rawValue: Theme.butter,
+            ])
+            .chartXAxisLabel("Points out of 100")
+            .chartLegend(position: .bottom, alignment: .leading)
+            .frame(height: max(120, CGFloat(categories.count) * 38 + 60))
+            .accessibilityLabel("Points earned, lost and still to come for each grading category")
+        }
+        .card(padding: 18)
+    }
+
     // MARK: Categories
 
     private var setupSection: some View {
-        Section {
+        KSection {
             EmptyStateView(
-                systemImage: "percent",
-                title: "Set up grading",
+                mood: .idle, title: "Set up the recipe",
                 message: "Add the parts of the grade (homework, midterm, final…) with their weights, then enter scores as they come in."
             )
             Menu {
@@ -148,15 +316,16 @@ struct CourseGradesView: View {
                 Label("Start from a template", systemImage: "wand.and.stars")
             }
             Button("Add category yourself", systemImage: "plus") { sheet = .newCategory }
+                .buttonStyle(.kukit(.ghost))
         }
     }
 
     private func categorySection(_ category: GradeCategory) -> some View {
         let entries = (category.entries ?? []).sorted { $0.date > $1.date }
         let percent = GradeCalculator.percent(of: category.input.entries, method: category.method)
-        return Section {
+        return KSection {
             if entries.isEmpty {
-                Text("No scores yet").font(.footnote).foregroundStyle(.secondary)
+                Text("No scores yet").font(.kukit(.footnote, weight: .medium)).foregroundStyle(.secondary)
             }
             ForEach(entries) { entry in
                 Button { sheet = .editEntry(entry) } label: { entryRow(entry) }
@@ -169,18 +338,18 @@ struct CourseGradesView: View {
                     }
             }
             Button("Add score", systemImage: "plus") { sheet = .newEntry(category) }
-                .font(.subheadline)
+                .buttonStyle(.kukit(.ghost))
         } header: {
             Button { sheet = .editCategory(category) } label: {
                 HStack {
-                    Text(category.name).font(.headline).foregroundStyle(.primary)
+                    Text(category.name).font(.kukit(.headline, weight: .heavy)).foregroundStyle(Theme.ink)
                     Text("\(GradeFormat.number(category.weight))%")
-                        .font(.caption.weight(.semibold))
+                        .font(.kukit(.caption, weight: .heavy))
                         .padding(.horizontal, 7).padding(.vertical, 2)
                         .background(course.color.opacity(0.18), in: Capsule())
                     Spacer()
                     Text(GradeFormat.percent(percent))
-                        .font(.subheadline).monospacedDigit().foregroundStyle(.secondary)
+                        .font(.kukit(.subheadline, weight: .bold)).monospacedDigit().foregroundStyle(.secondary)
                     Image(systemName: "pencil").font(.caption).foregroundStyle(.tertiary)
                 }
                 .textCase(nil)
@@ -191,98 +360,37 @@ struct CourseGradesView: View {
 
     private func entryRow(_ entry: GradeEntry) -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(entry.name.isEmpty ? "Score" : entry.name).font(.body)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(entry.name.isEmpty ? "Score" : entry.name).font(.kukit(.body, weight: .semibold))
                 if entry.isPlanned {
-                    Text("Planned").font(.caption2.weight(.semibold))
-                        .padding(.horizontal, 6).padding(.vertical, 1)
-                        .background(Color.orange.opacity(0.2), in: Capsule())
-                        .foregroundStyle(.orange)
+                    Chip(text: "Planned", systemImage: "lightbulb.fill", tint: Color(hex: "9A6B00"))
                 }
             }
             Spacer()
             Text("\(GradeFormat.number(entry.score)) / \(GradeFormat.number(entry.maxScore))")
-                .monospacedDigit()
+                .font(.kukit(.body, weight: .bold)).monospacedDigit()
             Text(GradeFormat.percent(entry.percent))
-                .font(.footnote).monospacedDigit().foregroundStyle(.secondary)
+                .font(.kukit(.footnote, weight: .semibold)).monospacedDigit().foregroundStyle(.secondary)
                 .frame(minWidth: 48, alignment: .trailing)
         }
-        .foregroundStyle(entry.isPlanned ? .secondary : .primary)
+        .foregroundStyle(entry.isPlanned ? Color.secondary : Theme.ink)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
     }
 
-    // MARK: What-if
-
-    private var whatIfSection: some View {
-        Section {
-            if let target = solveCategory {
-                Stepper(value: $course.targetPercent, in: 0...100, step: 0.5) {
-                    let band = scale.band(for: course.targetPercent)
-                    Text("Target \(GradeFormat.percent(course.targetPercent))\(band.map { " (\($0.label))" } ?? "")")
-                }
-                Menu {
-                    ForEach(scale.bands.sorted { $0.minPercent > $1.minPercent }) { band in
-                        Button("\(band.label) · \(GradeFormat.number(band.minPercent))%") {
-                            course.targetPercent = band.minPercent
-                        }
-                    }
-                } label: {
-                    Label("Pick a target grade", systemImage: "target")
-                }
-                Picker("Solve for", selection: Binding(
-                    get: { target.id },
-                    set: { solveCategoryID = $0 }
-                )) {
-                    ForEach(categories) { Text($0.name).tag($0.id) }
-                }
-
-                let result = GradeCalculator.requiredPercent(
-                    target: course.targetPercent, in: target.id, categories: course.categoryInputs
-                )
-                requiredLabel(result, categoryName: target.name)
-
-                ForEach(categories.filter { !$0.hasGradedEntries }) { category in
-                    plannedSlider(category)
-                }
-
-                if let best = summary.bestCasePercent, let worst = summary.worstCasePercent {
-                    HStack {
-                        Label("Best case \(GradeFormat.percent(best))", systemImage: "arrow.up.right")
-                        Spacer()
-                        Label("Worst case \(GradeFormat.percent(worst))", systemImage: "arrow.down.right")
-                    }
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                }
-            }
-        } header: {
-            Text("What do I need?")
-        } footer: {
-            Text("Use the sliders to guess the scores you haven't received yet. The projected grade above updates as you move them.")
-        }
-    }
+    // MARK: Plan the rest
 
     @ViewBuilder
-    private func requiredLabel(_ result: RequiredScore, categoryName: String) -> some View {
-        switch result {
-        case .needs(let value):
-            Label("You need \(GradeFormat.percent(value)) on \(categoryName).", systemImage: "scope")
-                .font(.headline)
-                .foregroundStyle(course.color)
-        case .secured:
-            Label("Secured: you reach \(GradeFormat.percent(course.targetPercent)) even with 0% on \(categoryName).",
-                  systemImage: "checkmark.seal.fill")
-                .foregroundStyle(.green)
-        case .unreachable(let best):
-            Label("Out of reach: even 100% on \(categoryName) gives at most \(GradeFormat.percent(best)).",
-                  systemImage: "xmark.octagon.fill")
-                .foregroundStyle(.red)
-        case .noWeight:
-            Label("\(categoryName) has no weight.", systemImage: "questionmark.circle").foregroundStyle(.secondary)
-        case .noData:
-            Label("Add scores or planned scores for the other categories first.", systemImage: "questionmark.circle")
-                .foregroundStyle(.secondary)
+    private var planSection: some View {
+        let open = categories.filter { !$0.hasGradedEntries }
+        if !open.isEmpty {
+            KSection {
+                ForEach(open) { category in plannedSlider(category) }
+            } header: {
+                Text("Plan the rest")
+            } footer: {
+                Text("Guess the scores you haven't received yet. The projected grade and the answer above update as you move the sliders.")
+            }
         }
     }
 
@@ -292,20 +400,19 @@ struct CourseGradesView: View {
         let value = planned?.percent ?? fallback
         return VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("\(category.name) (guess)")
+                Text("\(category.name) (guess)").font(.kukit(.body, weight: .semibold))
                 Spacer()
                 Text(GradeFormat.percent(planned == nil ? nil : value))
-                    .monospacedDigit().foregroundStyle(.secondary)
+                    .font(.kukit(.body, weight: .heavy)).monospacedDigit().foregroundStyle(.secondary)
                 if planned != nil {
-                    Button("Clear") { clearPlanned(category) }
-                        .font(.footnote).buttonStyle(.borderless)
+                    Button("Clear") { clearPlanned(category) }.buttonStyle(.kukit(.ghost))
                 }
             }
             Slider(value: Binding(
                 get: { value },
                 set: { setPlanned(category, percent: $0.rounded()) }
             ), in: 0...100, step: 1)
-            .tint(course.color)
+            .tint(Theme.accent)
         }
         .padding(.vertical, 2)
     }

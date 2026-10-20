@@ -84,4 +84,22 @@ public struct StatsCalculator: Sendable {
         }
         return streak
     }
+
+    /// The longest run of consecutive days that met `goalSeconds` (any session when the goal is 0).
+    public func longestStreak(_ sessions: [SessionSummary], goalSeconds: TimeInterval) -> Int {
+        var buckets: [Date: TimeInterval] = [:]
+        for session in sessions {
+            buckets[calendar.startOfDay(for: session.startedAt), default: 0] += session.seconds
+        }
+        let threshold = max(goalSeconds, 1)
+        let days = buckets.filter { $0.value >= threshold }.keys.sorted()
+        var longest = 0, run = 0
+        var previous: Date?
+        for day in days {
+            if let previous, calendar.date(byAdding: .day, value: 1, to: previous) == day { run += 1 } else { run = 1 }
+            longest = max(longest, run)
+            previous = day
+        }
+        return longest
+    }
 }

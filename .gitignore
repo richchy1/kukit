@@ -11,6 +11,11 @@ build/
 # macOS
 .DS_Store
 
+# Original long source recordings (only the trimmed focus-music.m4a is tracked)
+*.mp4
+*.mov
+*.wav
+
 # Local planning notes (kept on disk, not part of the repo)
 PLAN.md
 docs/

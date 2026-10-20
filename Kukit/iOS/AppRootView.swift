@@ -5,8 +5,6 @@ import SwiftUI
 struct AppRootView: View {
     @Environment(AppRouter.self) private var router
     @Environment(TimerController.self) private var timer
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.modelContext) private var context
 
     var body: some View {
         @Bindable var router = router
@@ -27,6 +25,6 @@ struct AppRootView: View {
                 NotesView().miniPlayer()
             }
         }
-        .refreshTimerWhenActive(timer, scenePhase: scenePhase, context: context)
+        .kukitRoot()
     }
 }

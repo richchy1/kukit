@@ -65,6 +65,9 @@ struct NotesView: View {
         .searchable(text: $search, prompt: "Search notes, tasks, courses")
         .toolbar { toolbarItems }
         .modifier(sharedModifiers)
+        .kukitScreen()
+        .task { openPendingNote() }
+        .onChange(of: router.pendingNoteID) { openPendingNote() }
         #else
         NavigationStack(path: $path) {
             listPane
@@ -76,6 +79,8 @@ struct NotesView: View {
                 }
         }
         .modifier(sharedModifiers)
+        .task { openPendingNote() }
+        .onChange(of: router.pendingNoteID) { openPendingNote() }
         #endif
     }
 
@@ -113,8 +118,10 @@ struct NotesView: View {
         #if os(macOS)
         List(selection: $selection) { listContent }
             .listStyle(.sidebar)
+            .kukitList()
         #else
         List { listContent }
+            .kukitList()
         #endif
     }
 
@@ -124,10 +131,10 @@ struct NotesView: View {
             searchResults
         } else if allNotes.isEmpty {
             EmptyStateView(
-                systemImage: "note.text",
-                title: "No notes yet",
-                message: "Write lecture notes, exam cheat-sheets and reading summaries in Markdown.",
-                actionTitle: "New page"
+                mood: .idle,
+                title: "A blank recipe card",
+                message: Chef.line(.emptyNotes, seed: Chef.daySeed()),
+                actionTitle: "Write the first page"
             ) { create(.blank) }
             .listRowBackground(Color.clear)
         } else {
@@ -228,9 +235,10 @@ struct NotesView: View {
                 .id(note.id)
         } else {
             VStack(spacing: 10) {
-                Image(systemName: "note.text").font(.system(size: 40)).foregroundStyle(.tertiary)
-                Text("Select a page, or create one").foregroundStyle(.secondary)
-                Button("New page") { create(.blank) }
+                ChefKukit(mood: .idle, size: 96, animated: false)
+                Text("Pick a page, or write a new one")
+                    .font(.kukit(.headline, weight: .bold)).foregroundStyle(.secondary)
+                Button("New page") { create(.blank) }.buttonStyle(.kukit(.primary))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -238,6 +246,13 @@ struct NotesView: View {
     #endif
 
     // MARK: Actions
+
+    /// A course card may have asked for a specific note.
+    private func openPendingNote() {
+        guard let id = router.pendingNoteID, let note = allNotes.first(where: { $0.id == id }) else { return }
+        router.pendingNoteID = nil
+        open(note)
+    }
 
     private func open(_ note: Note) {
         #if os(macOS)
@@ -298,12 +313,12 @@ struct NoteRow: View {
                 .frame(width: 20)
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
-                    Text(note.displayTitle).font(.body.weight(.medium)).lineLimit(1)
+                    Text(note.displayTitle).font(.system(.body, design: .serif, weight: .semibold)).lineLimit(1)
                     if note.isPinned { Image(systemName: "pin.fill").font(.caption2).foregroundStyle(Theme.accent) }
                 }
                 let snippet = note.snippet
                 if !snippet.isEmpty {
-                    Text(snippet).font(.caption).foregroundStyle(.secondary).lineLimit(2)
+                    Text(snippet).font(.kukit(.caption, weight: .medium)).foregroundStyle(.secondary).lineLimit(2)
                 }
             }
         }

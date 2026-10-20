@@ -17,15 +17,15 @@ struct SessionRow: View {
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(session.course?.name ?? "Deleted course")
-                    .font(.body.weight(.medium))
+                    .font(.kukit(.body, weight: .bold))
                 Text(detail)
-                    .font(.caption)
+                    .font(.kukit(.caption, weight: .medium))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
             Spacer(minLength: 8)
             Text(DurationFormat.short(session.focusSeconds))
-                .font(.subheadline.weight(.semibold))
+                .font(.kukit(.subheadline, weight: .heavy))
                 .monospacedDigit()
         }
         .accessibilityElement(children: .combine)
@@ -74,14 +74,14 @@ struct HistoryView: View {
         List {
             if sessions.isEmpty {
                 EmptyStateView(
-                    systemImage: "clock.arrow.circlepath",
-                    title: "No sessions yet",
-                    message: "Finished focus sessions show up here."
+                    mood: .idle,
+                    title: "No dishes served yet",
+                    message: Chef.line(.emptyHistory, seed: Chef.daySeed())
                 )
                 .listRowBackground(Color.clear)
             }
             ForEach(groups) { group in
-                Section {
+                KSection {
                     ForEach(group.sessions) { session in
                         Button { editing = session } label: {
                             SessionRow(session: session, showsCourse: course == nil)
@@ -105,6 +105,7 @@ struct HistoryView: View {
                 }
             }
         }
+        .kukitList()
         .navigationTitle(course.map { "\($0.name) sessions" } ?? "History")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -145,12 +146,13 @@ struct SessionEditorView: View {
                 }
                 DatePicker("Started", selection: $startedAt)
                 NumberRow(title: "Focus time", unit: "min", value: $minutes, range: 1...600)
-                Section("Note") {
+                KSection("Note") {
                     TextField("What did you cover?", text: $comment, axis: .vertical)
                         .lineLimit(2...6)
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle("Edit session")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

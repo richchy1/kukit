@@ -136,6 +136,13 @@ public struct TimerEngine: Sendable {
 
     // MARK: Queries
 
+    /// Whether `advance(now:)` would do anything. Lets an observing controller poll the clock
+    /// without calling a mutating method (which would notify every observer, every time).
+    public func needsAdvance(now: Date) -> Bool {
+        guard state.status == .running, let end = state.endDate else { return false }
+        return now >= end
+    }
+
     /// Notifications that should be pending right now: the end of the current phase and,
     /// with auto-start on, the end of the phase after it.
     public func pendingAlerts(now: Date) -> [PhaseAlert] {

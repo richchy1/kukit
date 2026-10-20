@@ -76,7 +76,7 @@ struct AssignmentEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section {
+                KSection {
                     TextField("Title", text: $title)
                     Picker("Course", selection: $courseID) {
                         Text("Choose…").tag(UUID?.none)
@@ -93,7 +93,7 @@ struct AssignmentEditorView: View {
                     }
                 }
 
-                Section("Due") {
+                KSection("Due") {
                     Toggle("Due date", isOn: $hasDue.animation())
                     if hasDue {
                         DatePicker("Date", selection: $dueDate, displayedComponents: .date)
@@ -105,7 +105,7 @@ struct AssignmentEditorView: View {
                 }
 
                 if hasDue {
-                    Section {
+                    KSection {
                         Toggle("Remind me", isOn: $remindersEnabled.animation())
                         if remindersEnabled {
                             Toggle("Use default timing", isOn: $useDefaultReminders.animation())
@@ -124,7 +124,7 @@ struct AssignmentEditorView: View {
                         }
                     }
 
-                    Section {
+                    KSection {
                         Toggle("Add to Apple Reminders", isOn: $addToAppleReminders)
                             .onChange(of: addToAppleReminders) { _, on in
                                 if on { requestRemindersAccess() }
@@ -143,7 +143,7 @@ struct AssignmentEditorView: View {
                 }
 
                 if !categories.isEmpty {
-                    Section {
+                    KSection {
                         Picker("Counts toward", selection: $gradeCategoryID) {
                             Text("Nothing").tag(UUID?.none)
                             ForEach(categories) { Text($0.name).tag(Optional($0.id)) }
@@ -173,20 +173,20 @@ struct AssignmentEditorView: View {
                 }
 
                 if let linked = assignment?.notes, !linked.isEmpty {
-                    Section("Linked notes") {
+                    KSection("Linked notes") {
                         ForEach(linked) { note in
                             Label(note.displayTitle, systemImage: "note.text")
                         }
                     }
                 }
 
-                Section("Notes") {
+                KSection("Notes") {
                     TextField("Details", text: $details, axis: .vertical)
                         .lineLimit(2...8)
                 }
 
                 if let assignment {
-                    Section {
+                    KSection {
                         if focusSeconds > 0 {
                             LabeledContent("Focused so far", value: DurationFormat.short(focusSeconds))
                         }
@@ -198,6 +198,7 @@ struct AssignmentEditorView: View {
                 }
             }
             .formStyle(.grouped)
+            .kukitList()
             .navigationTitle(assignment == nil ? "New task" : "Edit task")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)

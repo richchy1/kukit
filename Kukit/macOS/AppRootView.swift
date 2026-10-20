@@ -4,8 +4,6 @@ import SwiftUI
 struct AppRootView: View {
     @Environment(AppRouter.self) private var router
     @Environment(TimerController.self) private var timer
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.modelContext) private var context
 
     private let sections: [AppSection] = [.today, .focus, .tasks, .notes, .courses, .grades, .stats]
 
@@ -17,9 +15,19 @@ struct AppRootView: View {
         NavigationSplitView {
             List(sections, selection: selection) { section in
                 Label(section.title, systemImage: section.systemImage)
+                    .font(.kukit(.body, weight: .semibold))
                     .tag(section)
             }
             .navigationSplitViewColumnWidth(min: 190, ideal: 220, max: 280)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                HStack(spacing: 8) {
+                    ChefKukit(mood: .idle, size: 38, animated: false)
+                    Text("Kukit").font(.kukit(.title2, weight: .heavy))
+                    Spacer(minLength: 0)
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+            }
             .safeAreaInset(edge: .bottom, spacing: 0) { MiniPlayerBar() }
         } detail: {
             NavigationStack {
@@ -37,6 +45,6 @@ struct AppRootView: View {
             .id(router.section)
         }
         .frame(minWidth: 860, minHeight: 560)
-        .refreshTimerWhenActive(timer, scenePhase: scenePhase, context: context)
+        .kukitRoot()
     }
 }

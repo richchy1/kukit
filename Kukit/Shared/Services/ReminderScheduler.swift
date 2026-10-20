@@ -44,7 +44,15 @@ final class ReminderScheduler {
 @MainActor
 enum AssignmentActions {
     static func setDone(_ assignment: Assignment, _ done: Bool, context: ModelContext) {
+        let wasDone = assignment.isDone
         assignment.status = done ? .done : .todo
+        if done && !wasDone {
+            Haptics.play(.success)
+            ToastCenter.shared.show(
+                Chef.line(.taskComplete, seed: Int(Date.now.timeIntervalSince1970 / 7)),
+                detail: assignment.title, mood: .celebrate
+            )
+        }
         // A linked score is a guess until the task is done.
         if let entry = assignment.gradeEntry {
             entry.isPlanned = !done

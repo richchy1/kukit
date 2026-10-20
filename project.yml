@@ -13,7 +13,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "1.0.0"
+    MARKETING_VERSION: "1.1.0"
     CURRENT_PROJECT_VERSION: "1"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -39,6 +39,14 @@ targets:
       - path: Kukit/iOS
     dependencies:
       - package: KukitCore
+    info:
+      path: Kukit/iOS/Info.plist
+      properties:
+        # Lets the focus music keep playing with the screen locked during a session. Audio only
+        # runs while a focus phase is active; it stops when the session ends or turns into a break.
+        UIBackgroundModes: [audio]
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
     settings:
       base:
         PRODUCT_NAME: Kukit

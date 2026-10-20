@@ -13,6 +13,12 @@ enum Prefs {
     static let reminderOffsetsTask = "pref.reminderOffsets.task"
     static let reminderOffsetsExam = "pref.reminderOffsets.exam"
     static let allDayReminderHour = "pref.allDayReminderHour"
+    static let musicEnabled = "pref.music.enabled"
+    static let musicVolume = "pref.music.volume"
+    static let musicMuted = "pref.music.muted"
+    static let musicAutoStart = "pref.music.autoStart"
+    static let musicResumeWithTimer = "pref.music.resumeWithTimer"
+    static let chefHumor = "pref.chef.humor"
 
     // Remembered state
     static let timerState = "state.timerState"
@@ -32,6 +38,12 @@ enum Prefs {
             reminderOffsetsTask: "1440,120",
             reminderOffsetsExam: "4320,1440,120",
             allDayReminderHour: 9,
+            musicEnabled: true,
+            musicVolume: 0.6,
+            musicMuted: false,
+            musicAutoStart: true,
+            musicResumeWithTimer: true,
+            chefHumor: true,
         ])
     }
 }
