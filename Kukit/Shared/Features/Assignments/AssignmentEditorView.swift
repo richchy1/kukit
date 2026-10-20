@@ -172,6 +172,14 @@ struct AssignmentEditorView: View {
                     }
                 }
 
+                if let linked = assignment?.notes, !linked.isEmpty {
+                    Section("Linked notes") {
+                        ForEach(linked) { note in
+                            Label(note.displayTitle, systemImage: "note.text")
+                        }
+                    }
+                }
+
                 Section("Notes") {
                     TextField("Details", text: $details, axis: .vertical)
                         .lineLimit(2...8)

@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// iPhone: a tab bar, with a mini timer above it while a session is running.
+/// Grades, stats and settings live in the menu at the top of Today.
 struct AppRootView: View {
     @Environment(AppRouter.self) private var router
     @Environment(TimerController.self) private var timer
@@ -22,28 +23,10 @@ struct AppRootView: View {
             Tab("Courses", systemImage: AppSection.courses.systemImage, value: AppSection.courses) {
                 NavigationStack { CoursesView() }.miniPlayer()
             }
-            Tab("More", systemImage: AppSection.more.systemImage, value: AppSection.more) {
-                NavigationStack { MoreView() }.miniPlayer()
+            Tab("Notes", systemImage: AppSection.notes.systemImage, value: AppSection.notes) {
+                NotesView().miniPlayer()
             }
         }
         .refreshTimerWhenActive(timer, scenePhase: scenePhase, context: context)
-    }
-}
-
-/// Everything that doesn't get its own tab.
-struct MoreView: View {
-    var body: some View {
-        List {
-            NavigationLink { GradesOverviewView() } label: {
-                Label("Grades & GPA", systemImage: AppSection.grades.systemImage)
-            }
-            NavigationLink { StatsView() } label: {
-                Label("Stats", systemImage: AppSection.stats.systemImage)
-            }
-            NavigationLink { SettingsView() } label: {
-                Label("Settings", systemImage: AppSection.settings.systemImage)
-            }
-        }
-        .navigationTitle("More")
     }
 }

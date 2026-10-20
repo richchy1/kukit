@@ -152,6 +152,74 @@ struct ModelTests {
         #expect(try context.fetchCount(FetchDescriptor<GradeEntry>()) == 1)
     }
 
+    @Test func notesNestAndDeleteWithTheirSubpages() throws {
+        let context = try makeContext()
+        let root = Note(title: "Calculus")
+        let child = Note(title: "Limits", parent: root)
+        let grandchild = Note(title: "Epsilon-delta", parent: child)
+        [root, child, grandchild].forEach { context.insert($0) }
+        try context.save()
+
+        #expect(root.childNotes?.map(\.title) == ["Limits"])
+        #expect(grandchild.childNotes == nil)                   // a leaf, as OutlineGroup expects
+        #expect(root.descendantCount == 2)
+
+        context.delete(child)
+        try context.save()
+        #expect(try context.fetchCount(FetchDescriptor<Note>()) == 1)   // grandchild went with it
+    }
+
+    @Test func deletingACourseKeepsItsNotes() throws {
+        let context = try makeContext()
+        let course = Course(name: "History")
+        let note = Note(title: "Cold War", course: course)
+        context.insert(course); context.insert(note)
+        try context.save()
+        #expect(note.course?.id == course.id)
+
+        context.delete(course)
+        try context.save()
+        #expect(try context.fetchCount(FetchDescriptor<Note>()) == 1)
+        #expect(note.course == nil)
+    }
+
+    @Test func notesAndTasksLinkBothWays() throws {
+        let context = try makeContext()
+        let task = Assignment(title: "Essay", course: nil)
+        let a = Note(title: "Outline"), b = Note(title: "Sources")
+        [a, b].forEach { context.insert($0) }
+        context.insert(task)
+        a.assignments = [task]
+        b.assignments = [task]
+        try context.save()
+        #expect(Set((task.notes ?? []).map(\.title)) == ["Outline", "Sources"])
+
+        context.delete(a)
+        try context.save()
+        #expect((task.notes ?? []).map(\.title) == ["Sources"])
+        #expect(try context.fetchCount(FetchDescriptor<Assignment>()) == 1)
+    }
+
+    @Test func templatesProduceUsableMarkdown() throws {
+        let course = Course(name: "Physics")
+        for template in NoteTemplate.allCases {
+            let note = template.make(course: course, parent: nil)
+            #expect(note.course === course)
+            if template != .blank {
+                #expect(!note.title.isEmpty)
+                let blocks = Markdown.parse(note.markdownBody)
+                #expect(blocks.contains { if case .heading = $0 { true } else { false } })
+            }
+        }
+        let lecture = NoteTemplate.lecture.make(course: nil, parent: nil)
+        let hasChecklist = Markdown.parse(lecture.markdownBody).contains {
+            if case .list(_, let items) = $0 { items.contains { $0.checked != nil } } else { false }
+        }
+        #expect(hasChecklist)
+        #expect(NoteTemplate.cheatSheet.make(course: course, parent: nil).title == "Physics cheat-sheet")
+        #expect(Note(title: "  ").displayTitle == "Untitled")
+    }
+
     @Test func customPresetBecomesAClampedTimerConfig() throws {
         let preset = TimerPreset(name: "Wild", focusMinutes: 999, shortBreakMinutes: 0,
                                  longBreakMinutes: 20, roundsBeforeLongBreak: 1)

@@ -31,6 +31,7 @@ Kukit/iOS/                  iPhone-only: tab bar root
 - v0.1 — courses, focus timer (Classic 25/5, Deep Work 50/10, custom techniques, stopwatch), history, stats, Mac menu bar timer, iPhone mini-player
 - v0.2 — tasks with due dates, priorities and reminders (local notifications), Today view, week calendar, optional one-way push to Apple Reminders
 - v0.3 — grades: weighted categories, scores (real or planned), current and projected grade, "what do I need on the final?", GPA, and fully editable grading scales (Korean 4.5 by default)
+- v0.4 — Markdown notes: nested pages, live preview, formatting bar, checklists, `[[page links]]`, templates, link to tasks, search across notes/tasks/courses
 
 ## Tests
 

@@ -7,7 +7,7 @@ struct AppRootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
 
-    private let sections: [AppSection] = [.today, .focus, .tasks, .courses, .grades, .stats]
+    private let sections: [AppSection] = [.today, .focus, .tasks, .notes, .courses, .grades, .stats]
 
     var body: some View {
         let selection = Binding<AppSection?>(
@@ -27,10 +27,11 @@ struct AppRootView: View {
                 case .today: TodayView()
                 case .focus: FocusView()
                 case .tasks: AssignmentsView()
+                case .notes: NotesView()
                 case .courses: CoursesView()
                 case .grades: GradesOverviewView()
                 case .stats: StatsView()
-                case .settings, .more: SettingsView()
+                case .settings: SettingsView()
                 }
             }
             .id(router.section)

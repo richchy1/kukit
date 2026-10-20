@@ -51,6 +51,10 @@ final class Course {
     @Relationship(deleteRule: .cascade, inverse: \GradeCategory.course)
     var gradeCategories: [GradeCategory]?
 
+    /// Notes survive a course being deleted (they simply become unfiled).
+    @Relationship(deleteRule: .nullify, inverse: \Note.course)
+    var notes: [Note]?
+
     init(name: String, code: String = "", credits: Double = 3,
          colorHex: String = CoursePalette.colors[0].hex, symbolName: String = "book.closed",
          instructor: String = "", semester: Semester? = nil) {
@@ -177,6 +181,9 @@ final class Assignment {
     var course: Course?
     var gradeEntry: GradeEntry?
 
+    @Relationship(deleteRule: .nullify, inverse: \Note.assignments)
+    var notes: [Note]?
+
     init(title: String, course: Course?, type: AssignmentType = .homework,
          dueDate: Date? = nil, hasDueTime: Bool = false) {
         self.title = title
@@ -243,7 +250,7 @@ final class TimerPreset {
 enum KukitSchema {
     static let models: [any PersistentModel.Type] = [
         Semester.self, Course.self, StudySession.self, TimerPreset.self, Assignment.self,
-        GradingScale.self, GradeCategory.self, GradeEntry.self,
+        GradingScale.self, GradeCategory.self, GradeEntry.self, Note.self,
     ]
 
     @MainActor

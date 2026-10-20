@@ -15,6 +15,9 @@ struct TodayView: View {
     @Query(sort: \GradingScale.createdAt) private var scales: [GradingScale]
     @AppStorage(Prefs.dailyGoalMinutes) private var goalMinutes = 120
     @State private var editing: Assignment?
+    #if os(iOS)
+    @State private var destination: MoreDestination?
+    #endif
 
     private let calculator = StatsCalculator()
 
@@ -66,6 +69,26 @@ struct TodayView: View {
         .background(Theme.screenBackground)
         .navigationTitle("Today")
         .sheet(item: $editing) { AssignmentEditorView(assignment: $0) }
+        #if os(iOS)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button("Grades & GPA", systemImage: AppSection.grades.systemImage) { destination = .grades }
+                    Button("Stats", systemImage: AppSection.stats.systemImage) { destination = .stats }
+                    Button("Settings", systemImage: AppSection.settings.systemImage) { destination = .settings }
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
+                }
+            }
+        }
+        .navigationDestination(item: $destination) { target in
+            switch target {
+            case .grades: GradesOverviewView()
+            case .stats: StatsView()
+            case .settings: SettingsView()
+            }
+        }
+        #endif
     }
 
     // MARK: Cards
@@ -299,3 +322,11 @@ struct TodayView: View {
         .card()
     }
 }
+
+#if os(iOS)
+/// Screens that don't have their own tab on iPhone; reached from the menu on Today.
+enum MoreDestination: Hashable, Identifiable {
+    case grades, stats, settings
+    var id: Self { self }
+}
+#endif
