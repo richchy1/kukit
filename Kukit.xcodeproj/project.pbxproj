@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00EA37DDE5447B067CF3A630 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C189EF8594EB1BBE532A8F /* AppRouter.swift */; };
 		063A6AFDE8A2E99D64776262 /* AssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBC4C96F385E30AA2706BDF /* AssignmentEditorView.swift */; };
+		088AE62FE926BAFD2221B44F /* GradeEditors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA85A619817149C2C3D18518 /* GradeEditors.swift */; };
 		115016B9BDBB7F7C3908BF42 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826D3FE46A33D5EC0D726061 /* TodayView.swift */; };
 		14563943088BEB859A2DD13B /* TimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */; };
 		15AED05B747D007CECEF617B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D407F732F963B4F81003D1 /* HistoryView.swift */; };
@@ -19,6 +20,9 @@
 		2EC7B99E03B9AC43E99BCF11 /* PresetEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */; };
 		2ED5599ABBD5DA4CFC1FA1E6 /* FocusComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5AF948C015F4667565ECC /* FocusComponents.swift */; };
 		3CAA7FD21B700C6AD9CE9D58 /* TimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */; };
+		4290BEB85DCB5125A51240AC /* GradingScalesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315F439D1F526D9C1B5D0A72 /* GradingScalesView.swift */; };
+		441FD3BCD7F6F1B312F4823F /* GradeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2B248B4C4D7B35340CE470 /* GradeModels.swift */; };
+		45E42D8A05BBFD09597310D5 /* GradingScalesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315F439D1F526D9C1B5D0A72 /* GradingScalesView.swift */; };
 		463DA7D2E70B8DE286B8ACC8 /* MenuBarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AEF42BB56990F4FE137F92 /* MenuBarViews.swift */; };
 		4640A3A5B442248504038D23 /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */; };
 		4825CA001E2BBDFFED89EA74 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA98334306EF7FCD7005F3B /* Models.swift */; };
@@ -31,6 +35,7 @@
 		70B6ED90794D92D6384B5CD3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23C12EDC4412E94DC819688 /* StatsView.swift */; };
 		715C0DF11921657E556BAB5A /* AssignmentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A31D67B953054C15A0C988E /* AssignmentRow.swift */; };
 		71F3E684FCE680A5FC51E27A /* AssignmentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A31D67B953054C15A0C988E /* AssignmentRow.swift */; };
+		73291F4445B9974CC9CA329C /* CourseGradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B6AC8D15240244173C75EB /* CourseGradesView.swift */; };
 		7606C3E899C951F8633BFAAF /* FocusComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD5AF948C015F4667565ECC /* FocusComponents.swift */; };
 		76DE369E4A90400F777AE3BF /* AssignmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ACBB44A80DF8EC65750C9E /* AssignmentsView.swift */; };
 		788D3EF0F9AB426C0AC84810 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C189EF8594EB1BBE532A8F /* AppRouter.swift */; };
@@ -41,22 +46,28 @@
 		983563CA819E619FF86BE2D4 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2CE2186682FD97000F687 /* WeekCalendarView.swift */; };
 		9BB7ADA32C767155E7351985 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */; };
 		9C6EA6F795DFE32280C717AF /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D407F732F963B4F81003D1 /* HistoryView.swift */; };
+		A061D6B7A493DA7EAE6C7464 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CDA77D1FCB65DB37EB428F /* ModelTests.swift */; };
 		A359C0F3026E6A8DDD6C5259 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99D2E3FA81522B984216BB20 /* Assets.xcassets */; };
 		A5F57FC01B1686483A048CB3 /* ReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D99BCC638854E9C86A9B8 /* ReminderScheduler.swift */; };
+		A673733A97C3649218ADB40B /* GradesOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F59DF2E528FB022727960D /* GradesOverviewView.swift */; };
 		B33BA720496A3C6F810A68B0 /* EventKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B6856729531A97D5D854B4 /* EventKitService.swift */; };
 		B64AED59AB98E1FEA8A74125 /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */; };
+		B6D7CF40A7EE0F33A3A78A63 /* KukitCore in Frameworks */ = {isa = PBXBuildFile; productRef = C0B494707A7654C371C36610 /* KukitCore */; };
 		BEBE3CF55A5491760A6E7999 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99D2E3FA81522B984216BB20 /* Assets.xcassets */; };
 		BF2D494F9F9501AB65953B94 /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */; };
+		C6B2A2F3EB7940840A08B164 /* GradeEditors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA85A619817149C2C3D18518 /* GradeEditors.swift */; };
 		C9B6AE8D06F5021D61FB171A /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826D3FE46A33D5EC0D726061 /* TodayView.swift */; };
 		CF979A3CAAAD5979F0B17142 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC2CE2186682FD97000F687 /* WeekCalendarView.swift */; };
 		D4EB1B6E8DE275A3410D53AF /* CourseEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F3AEF069B792172A3769DC /* CourseEditorView.swift */; };
 		D5C39866FDD969967068A468 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729CBB523E75E85810085A5 /* AppRootView.swift */; };
 		D61338C6AB279DF3DB75913A /* ReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D99BCC638854E9C86A9B8 /* ReminderScheduler.swift */; };
+		D61A710AFABBD077865E86B2 /* CourseGradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B6AC8D15240244173C75EB /* CourseGradesView.swift */; };
 		D8988E14FA13155AE54210AC /* MiniPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B6F17756BCF61F00848856 /* MiniPlayerBar.swift */; };
 		DB0BF960B791BB5F4CFDEDFD /* KukitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E26C0F788AFD510BE5CE08C /* KukitApp.swift */; };
 		E1C681537E4727B057E56C4C /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5AD7F18688910EEEBDE0E /* AppRootView.swift */; };
 		E76CF558686FCFFA5E635F5F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA98334306EF7FCD7005F3B /* Models.swift */; };
 		E9D9FCF595E91EC93473DA32 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A2CAB35D58A69A0E036F60 /* Components.swift */; };
+		E9F1106E0F681BD2B5F48503 /* GradesOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F59DF2E528FB022727960D /* GradesOverviewView.swift */; };
 		EF6AE08FF89440C4FD3B554B /* KukitCore in Frameworks */ = {isa = PBXBuildFile; productRef = FFA1CA0573F8467D7FABA33F /* KukitCore */; };
 		F4F760C3D337EA25ACA10C7F /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */; };
 		F6AD84933075C0D8A22DB4D9 /* KukitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E26C0F788AFD510BE5CE08C /* KukitApp.swift */; };
@@ -64,7 +75,18 @@
 		FBB29072C57F37F2EF9750A9 /* CoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */; };
 		FD88EDA5648AF01734E7D6DA /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36B56F36BD75D6339C8B19 /* Prefs.swift */; };
 		FE71761F7CE65ABED42BEB11 /* AssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBC4C96F385E30AA2706BDF /* AssignmentEditorView.swift */; };
+		FF6F0C462EB6BA9CC66C530C /* GradeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2B248B4C4D7B35340CE470 /* GradeModels.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5CFEBA7F8896E29168949A5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A79D906EF6E68C979E50FBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 31DF5954D570021BB42375F4;
+			remoteInfo = "Kukit-macOS";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		04ACBB44A80DF8EC65750C9E /* AssignmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsView.swift; sourceTree = "<group>"; };
@@ -76,6 +98,8 @@
 		259D99BCC638854E9C86A9B8 /* ReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderScheduler.swift; sourceTree = "<group>"; };
 		2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		27AEF42BB56990F4FE137F92 /* MenuBarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViews.swift; sourceTree = "<group>"; };
+		315F439D1F526D9C1B5D0A72 /* GradingScalesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingScalesView.swift; sourceTree = "<group>"; };
+		35B6AC8D15240244173C75EB /* CourseGradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseGradesView.swift; sourceTree = "<group>"; };
 		3AAEDD2748AAC59462A505A2 /* PresetEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetEditorView.swift; sourceTree = "<group>"; };
 		3DD5AF948C015F4667565ECC /* FocusComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusComponents.swift; sourceTree = "<group>"; };
 		46FCEA8BB7ADD397A201A2B2 /* TimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerController.swift; sourceTree = "<group>"; };
@@ -83,6 +107,7 @@
 		50F5AD7F18688910EEEBDE0E /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
 		64B6F17756BCF61F00848856 /* MiniPlayerBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerBar.swift; sourceTree = "<group>"; };
 		6B36B56F36BD75D6339C8B19 /* Prefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
+		6FC0904843547AF4B22AA4F4 /* KukitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KukitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		73BF61DB9D2C92F56846B8A7 /* Kukit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kukit.entitlements; sourceTree = "<group>"; };
 		7A4FC00BECDAC7AA5F1269FA /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
 		826D3FE46A33D5EC0D726061 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
@@ -93,16 +118,28 @@
 		9C418161812A47352CB778A9 /* Kukit-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Kukit-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A348969B247A28E5C0F9FF3A /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		A672FDA7B0CA2C76F52971D5 /* CourseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailView.swift; sourceTree = "<group>"; };
+		A8CDA77D1FCB65DB37EB428F /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
+		AA85A619817149C2C3D18518 /* GradeEditors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeEditors.swift; sourceTree = "<group>"; };
 		B23C12EDC4412E94DC819688 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		B5D407F732F963B4F81003D1 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		B6C189EF8594EB1BBE532A8F /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		BE2B248B4C4D7B35340CE470 /* GradeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeModels.swift; sourceTree = "<group>"; };
 		C729CBB523E75E85810085A5 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		E4F59DF2E528FB022727960D /* GradesOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesOverviewView.swift; sourceTree = "<group>"; };
 		E609CEA9B1F44E794B9FB50F /* Kukit-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kukit-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E806A5D8338241D32F5FBDBB /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		ED561D7CA09AEDB3A39E0B74 /* CoursesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		91EC9D6C675005BDB5BE4B48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6D7CF40A7EE0F33A3A78A63 /* KukitCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B8681E6825D9A538ED436D6C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -122,6 +159,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		009A0C737D82B213BDD7D0D9 /* Grades */ = {
+			isa = PBXGroup;
+			children = (
+				35B6AC8D15240244173C75EB /* CourseGradesView.swift */,
+				AA85A619817149C2C3D18518 /* GradeEditors.swift */,
+				E4F59DF2E528FB022727960D /* GradesOverviewView.swift */,
+			);
+			path = Grades;
+			sourceTree = "<group>";
+		};
 		0811B0C9AC78A892F5441C2F /* Stats */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +183,7 @@
 			children = (
 				9C418161812A47352CB778A9 /* Kukit-iOS.app */,
 				E609CEA9B1F44E794B9FB50F /* Kukit-macOS.app */,
+				6FC0904843547AF4B22AA4F4 /* KukitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -155,6 +203,7 @@
 				860A3DE36B06DEC810994C74 /* iOS */,
 				80865256B33F5B855AFB79B6 /* macOS */,
 				CA454144FB11091924A0FF89 /* Shared */,
+				79D0434A2D04C26D75D758D3 /* Tests */,
 			);
 			path = Kukit;
 			sourceTree = "<group>";
@@ -165,6 +214,7 @@
 				DE2613CCEF3E4CD15C4FDA04 /* Assignments */,
 				FA2E20959262DFD2A1B7EFEE /* Courses */,
 				D8D8207B07307C0B770C6824 /* Focus */,
+				009A0C737D82B213BDD7D0D9 /* Grades */,
 				F2E4988FF467A41EB23AC571 /* Root */,
 				C1CB88D85FB134A2E303E87B /* Settings */,
 				0811B0C9AC78A892F5441C2F /* Stats */,
@@ -188,6 +238,14 @@
 				9383BAA842C81F2F6B702FCD /* KukitCore */,
 			);
 			path = Packages;
+			sourceTree = "<group>";
+		};
+		79D0434A2D04C26D75D758D3 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A8CDA77D1FCB65DB37EB428F /* ModelTests.swift */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		80865256B33F5B855AFB79B6 /* macOS */ = {
@@ -231,6 +289,7 @@
 		C1CB88D85FB134A2E303E87B /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				315F439D1F526D9C1B5D0A72 /* GradingScalesView.swift */,
 				2638EF8B2C3C3C2FB53F1141 /* SettingsView.swift */,
 			);
 			path = Settings;
@@ -291,6 +350,7 @@
 		FACC62EAA2E8E1242F73CC93 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				BE2B248B4C4D7B35340CE470 /* GradeModels.swift */,
 				0AA98334306EF7FCD7005F3B /* Models.swift */,
 				6B36B56F36BD75D6339C8B19 /* Prefs.swift */,
 			);
@@ -340,6 +400,26 @@
 			productReference = 9C418161812A47352CB778A9 /* Kukit-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B072CE71459D83C7D7A6E77B /* KukitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 547A9952828E052EE77F731D /* Build configuration list for PBXNativeTarget "KukitTests" */;
+			buildPhases = (
+				922F2C666D371E8DCF9AE9B4 /* Sources */,
+				91EC9D6C675005BDB5BE4B48 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A1ECAD1AE11F3B68CE480D39 /* PBXTargetDependency */,
+			);
+			name = KukitTests;
+			packageProductDependencies = (
+				C0B494707A7654C371C36610 /* KukitCore */,
+			);
+			productName = KukitTests;
+			productReference = 6FC0904843547AF4B22AA4F4 /* KukitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -370,6 +450,7 @@
 			targets = (
 				AD2BA5D9A99354F686B0A6E8 /* Kukit-iOS */,
 				31DF5954D570021BB42375F4 /* Kukit-macOS */,
+				B072CE71459D83C7D7A6E77B /* KukitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -406,10 +487,15 @@
 				E9D9FCF595E91EC93473DA32 /* Components.swift in Sources */,
 				BF2D494F9F9501AB65953B94 /* CourseDetailView.swift in Sources */,
 				2D2D10D445501CEE050C57DD /* CourseEditorView.swift in Sources */,
+				D61A710AFABBD077865E86B2 /* CourseGradesView.swift in Sources */,
 				FBB29072C57F37F2EF9750A9 /* CoursesView.swift in Sources */,
 				177285DA9E7F4220E1475F22 /* EventKitService.swift in Sources */,
 				7606C3E899C951F8633BFAAF /* FocusComponents.swift in Sources */,
 				B64AED59AB98E1FEA8A74125 /* FocusView.swift in Sources */,
+				C6B2A2F3EB7940840A08B164 /* GradeEditors.swift in Sources */,
+				FF6F0C462EB6BA9CC66C530C /* GradeModels.swift in Sources */,
+				A673733A97C3649218ADB40B /* GradesOverviewView.swift in Sources */,
+				4290BEB85DCB5125A51240AC /* GradingScalesView.swift in Sources */,
 				15AED05B747D007CECEF617B /* HistoryView.swift in Sources */,
 				DB0BF960B791BB5F4CFDEDFD /* KukitApp.swift in Sources */,
 				496D782992D97FF306E8C81A /* MiniPlayerBar.swift in Sources */,
@@ -427,6 +513,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		922F2C666D371E8DCF9AE9B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A061D6B7A493DA7EAE6C7464 /* ModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B4572AB892657A3C08E048C0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -439,10 +533,15 @@
 				59FA652529ED7740D49D1BCF /* Components.swift in Sources */,
 				4640A3A5B442248504038D23 /* CourseDetailView.swift in Sources */,
 				D4EB1B6E8DE275A3410D53AF /* CourseEditorView.swift in Sources */,
+				73291F4445B9974CC9CA329C /* CourseGradesView.swift in Sources */,
 				1A1896F01CA1FC831247A000 /* CoursesView.swift in Sources */,
 				B33BA720496A3C6F810A68B0 /* EventKitService.swift in Sources */,
 				2ED5599ABBD5DA4CFC1FA1E6 /* FocusComponents.swift in Sources */,
 				F4F760C3D337EA25ACA10C7F /* FocusView.swift in Sources */,
+				088AE62FE926BAFD2221B44F /* GradeEditors.swift in Sources */,
+				441FD3BCD7F6F1B312F4823F /* GradeModels.swift in Sources */,
+				E9F1106E0F681BD2B5F48503 /* GradesOverviewView.swift in Sources */,
+				45E42D8A05BBFD09597310D5 /* GradingScalesView.swift in Sources */,
 				9C6EA6F795DFE32280C717AF /* HistoryView.swift in Sources */,
 				F6AD84933075C0D8A22DB4D9 /* KukitApp.swift in Sources */,
 				463DA7D2E70B8DE286B8ACC8 /* MenuBarViews.swift in Sources */,
@@ -462,6 +561,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A1ECAD1AE11F3B68CE480D39 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 31DF5954D570021BB42375F4 /* Kukit-macOS */;
+			targetProxy = 5CFEBA7F8896E29168949A5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		200B2C3400C652F5E23BB64D /* Debug */ = {
@@ -492,6 +599,7 @@
 			buildSettings = {
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
 				CODE_SIGN_ENTITLEMENTS = Kukit/macOS/Kukit.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -504,6 +612,24 @@
 				SDKROOT = macosx;
 			};
 			name = Debug;
+		};
+		3E32246453552E2673925019 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richchy.kukit.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kukit.app/Contents/MacOS/Kukit";
+			};
+			name = Release;
 		};
 		4318BB9D8AF3334E9802F689 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -572,6 +698,24 @@
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
+		};
+		4B6665296D7CDA73E4BEC82B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richchy.kukit.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Kukit.app/Contents/MacOS/Kukit";
+			};
+			name = Debug;
 		};
 		58A1AF1B10D945EE482585DC /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -701,6 +845,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		547A9952828E052EE77F731D /* Build configuration list for PBXNativeTarget "KukitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B6665296D7CDA73E4BEC82B /* Debug */,
+				3E32246453552E2673925019 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		7C2CFB2189EA18942D292E6E /* Build configuration list for PBXProject "Kukit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -729,6 +882,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C0B494707A7654C371C36610 /* KukitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KukitCore;
+		};
 		FC8A30B17027050A46B893EB /* KukitCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KukitCore;

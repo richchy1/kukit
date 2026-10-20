@@ -27,6 +27,9 @@ struct AssignmentEditorView: View {
     @State private var details: String
     @State private var addToAppleReminders: Bool
     @State private var addToCalendar: Bool
+    @State private var gradeCategoryID: UUID?
+    @State private var gradeScore: Double?
+    @State private var gradeMax: Double
     @State private var accessMessage: String?
     @State private var confirmDelete = false
 
@@ -52,6 +55,9 @@ struct AssignmentEditorView: View {
         _details = State(initialValue: assignment?.details ?? "")
         _addToAppleReminders = State(initialValue: assignment?.addedToAppleReminders ?? false)
         _addToCalendar = State(initialValue: assignment?.addedToCalendar ?? false)
+        _gradeCategoryID = State(initialValue: assignment?.gradeEntry?.category?.id)
+        _gradeScore = State(initialValue: assignment?.gradeEntry?.score)
+        _gradeMax = State(initialValue: assignment?.gradeEntry?.maxScore ?? 100)
     }
 
     private static func defaultDueDate() -> Date {
@@ -62,6 +68,8 @@ struct AssignmentEditorView: View {
 
     private var courses: [Course] { allCourses.filter { !$0.isArchived || $0.id == courseID } }
     private var trimmedTitle: String { title.trimmingCharacters(in: .whitespacesAndNewlines) }
+    private var selectedCourse: Course? { allCourses.first { $0.id == courseID } }
+    private var categories: [GradeCategory] { selectedCourse?.sortedCategories ?? [] }
     private var canSave: Bool { !trimmedTitle.isEmpty && courseID != nil }
     private var focusSeconds: TimeInterval { linkedSessions.reduce(0) { $0 + $1.focusSeconds } }
 
@@ -134,6 +142,36 @@ struct AssignmentEditorView: View {
                     }
                 }
 
+                if !categories.isEmpty {
+                    Section {
+                        Picker("Counts toward", selection: $gradeCategoryID) {
+                            Text("Nothing").tag(UUID?.none)
+                            ForEach(categories) { Text($0.name).tag(Optional($0.id)) }
+                        }
+                        if gradeCategoryID != nil {
+                            HStack {
+                                Text("Score")
+                                Spacer()
+                                TextField("e.g. 18", value: $gradeScore, format: .number)
+                                    .multilineTextAlignment(.trailing).frame(width: 80)
+                                    #if os(iOS)
+                                    .keyboardType(.decimalPad)
+                                    #endif
+                                Text("/").foregroundStyle(.secondary)
+                                TextField("", value: $gradeMax, format: .number)
+                                    .multilineTextAlignment(.trailing).frame(width: 80)
+                                    #if os(iOS)
+                                    .keyboardType(.decimalPad)
+                                    #endif
+                            }
+                        }
+                    } header: {
+                        Text("Grade")
+                    } footer: {
+                        Text("The score shows up in \(selectedCourse?.name ?? "the course")'s grades. It counts as a guess until you mark the task done.")
+                    }
+                }
+
                 Section("Notes") {
                     TextField("Details", text: $details, axis: .vertical)
                         .lineLimit(2...8)
@@ -175,6 +213,31 @@ struct AssignmentEditorView: View {
     }
 
     // MARK: Actions
+
+    private func saveGrade(for target: Assignment) {
+        guard let category = categories.first(where: { $0.id == gradeCategoryID }) else {
+            if let existing = target.gradeEntry {
+                context.delete(existing)
+                target.gradeEntry = nil
+            }
+            return
+        }
+        guard let score = gradeScore, gradeMax > 0 else { return }
+        let entry: GradeEntry
+        if let existing = target.gradeEntry {
+            entry = existing
+        } else {
+            entry = GradeEntry(name: trimmedTitle, score: score, maxScore: gradeMax, category: category)
+            context.insert(entry)
+            target.gradeEntry = entry
+        }
+        entry.name = trimmedTitle
+        entry.category = category
+        entry.score = score
+        entry.maxScore = gradeMax
+        entry.isPlanned = !target.isDone
+        entry.date = target.completedAt ?? .now
+    }
 
     private func requestRemindersAccess() {
         Task {
@@ -223,6 +286,8 @@ struct AssignmentEditorView: View {
             target.dueDate = nil
             target.hasDueTime = false
         }
+
+        saveGrade(for: target)
 
         target.remindersEnabled = hasDue && remindersEnabled
         target.customReminderOffsets = useDefaultReminders ? nil : customOffsets.sorted(by: >)

@@ -25,13 +25,16 @@ Kukit/iOS/                  iPhone-only: tab bar root
 3. Target ▸ **Signing & Capabilities** ▸ choose your **Team** (your Apple ID's Personal Team). Do this for both targets.
 4. **Mac:** press ⌘R. **iPhone:** plug it in, turn on *Settings ▸ Privacy & Security ▸ Developer Mode*, choose the phone as the run destination, press ⌘R. With a free account the iPhone build expires after 7 days; run it again from Xcode to refresh it (your data is kept).
 
-## Tests
-
-```sh
-cd Packages/KukitCore && swift test
-```
 
 ## Status
 
 - v0.1 — courses, focus timer (Classic 25/5, Deep Work 50/10, custom techniques, stopwatch), history, stats, Mac menu bar timer, iPhone mini-player
 - v0.2 — tasks with due dates, priorities and reminders (local notifications), Today view, week calendar, optional one-way push to Apple Reminders
+- v0.3 — grades: weighted categories, scores (real or planned), current and projected grade, "what do I need on the final?", GPA, and fully editable grading scales (Korean 4.5 by default)
+
+## Tests
+
+```sh
+cd Packages/KukitCore && swift test          # timer, stats, reminders, grades, GPA
+xcodebuild -scheme Kukit-macOS -destination 'platform=macOS,arch=arm64' test   # SwiftData model tests
+```

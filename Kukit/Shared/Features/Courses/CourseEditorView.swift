@@ -8,6 +8,7 @@ struct CourseEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(TimerController.self) private var timer
     @Query(sort: \Semester.startDate, order: .reverse) private var semesters: [Semester]
+    @Query(sort: \GradingScale.createdAt) private var scales: [GradingScale]
 
     var course: Course?
     /// Deleting is done by the caller after this sheet closes, so a screen showing the course can step away first.
@@ -22,6 +23,7 @@ struct CourseEditorView: View {
     @State private var countsTowardGPA: Bool
     @State private var isArchived: Bool
     @State private var semesterID: UUID?
+    @State private var scaleID: UUID?
     @State private var newSemesterName = ""
     @State private var confirmDelete = false
 
@@ -37,6 +39,7 @@ struct CourseEditorView: View {
         _countsTowardGPA = State(initialValue: course?.countsTowardGPA ?? true)
         _isArchived = State(initialValue: course?.isArchived ?? false)
         _semesterID = State(initialValue: course?.semester?.id)
+        _scaleID = State(initialValue: course?.gradeScale?.id)
     }
 
     private var trimmedName: String { name.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -58,6 +61,10 @@ struct CourseEditorView: View {
                         Text("\(credits.formatted(.number.precision(.fractionLength(0...1)))) credits")
                     }
                     Toggle("Counts toward GPA", isOn: $countsTowardGPA)
+                    Picker("Grading scale", selection: $scaleID) {
+                        Text("Default").tag(UUID?.none)
+                        ForEach(scales) { Text($0.name).tag(Optional($0.id)) }
+                    }
                 }
 
                 Section("Semester") {
@@ -187,6 +194,7 @@ struct CourseEditorView: View {
         target.countsTowardGPA = countsTowardGPA
         target.isArchived = isArchived
         target.semester = semesters.first { $0.id == semesterID }
+        target.gradeScale = scales.first { $0.id == scaleID }
         try? context.save()
 
         if course == nil, timer.selectedCourseID == nil { timer.selectCourse(target.id) }

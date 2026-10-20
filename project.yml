@@ -73,6 +73,26 @@ targets:
         ARCHS: arm64
         ENABLE_HARDENED_RUNTIME: YES
         COMBINE_HIDPI_IMAGES: YES
+      configs:
+        Debug:
+          # Lets `xcodebuild test` inject its test-host entitlements into the sandboxed app.
+          CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: YES
+
+  KukitTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Kukit/Tests
+    dependencies:
+      - target: Kukit-macOS
+      - package: KukitCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.richchy.kukit.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Kukit.app/Contents/MacOS/Kukit"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        ARCHS: arm64
+        GENERATE_INFOPLIST_FILE: YES
 
 schemes:
   Kukit-iOS:
@@ -89,5 +109,9 @@ schemes:
         Kukit-macOS: all
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - KukitTests
     archive:
       config: Release

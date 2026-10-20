@@ -41,6 +41,14 @@ struct SettingsView: View {
                 }
             }
 
+            Section("Grades") {
+                NavigationLink {
+                    GradingScalesView()
+                } label: {
+                    Label("Grading scales", systemImage: "graduationcap")
+                }
+            }
+
             Section("Reminders") {
                 NavigationLink {
                     ReminderDefaultsView()

@@ -34,6 +34,9 @@ struct AppRootView: View {
 struct MoreView: View {
     var body: some View {
         List {
+            NavigationLink { GradesOverviewView() } label: {
+                Label("Grades & GPA", systemImage: AppSection.grades.systemImage)
+            }
             NavigationLink { StatsView() } label: {
                 Label("Stats", systemImage: AppSection.stats.systemImage)
             }

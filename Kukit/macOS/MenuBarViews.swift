@@ -9,20 +9,13 @@ struct MenuBarLabel: View {
     @AppStorage(Prefs.menuBarCountdown) private var showCountdown = true
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { context in
-            let state = timer.state
-            HStack(spacing: 4) {
-                Image(systemName: state.isActive && state.phase.isBreak ? "cup.and.saucer.fill" : "timer")
-                if state.isActive && showCountdown {
-                    Text(text(state, at: context.date)).monospacedDigit()
-                }
+        let state = timer.state
+        HStack(spacing: 4) {
+            Image(systemName: state.isActive && state.phase.isBreak ? "cup.and.saucer.fill" : "timer")
+            if state.isActive && showCountdown {
+                Text(timer.clockText).monospacedDigit()
             }
         }
-    }
-
-    private func text(_ state: TimerState, at now: Date) -> String {
-        if let remaining = state.remaining(at: now) { return DurationFormat.clock(remaining) }
-        return DurationFormat.clock(state.elapsed(at: now).rounded(.down))
     }
 }
 

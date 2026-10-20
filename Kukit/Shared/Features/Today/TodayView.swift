@@ -12,6 +12,7 @@ struct TodayView: View {
     @Query(sort: [SortDescriptor(\TimerPreset.sortOrder), SortDescriptor(\TimerPreset.createdAt)])
     private var customPresets: [TimerPreset]
     @Query private var assignments: [Assignment]
+    @Query(sort: \GradingScale.createdAt) private var scales: [GradingScale]
     @AppStorage(Prefs.dailyGoalMinutes) private var goalMinutes = 120
     @State private var editing: Assignment?
 
@@ -54,6 +55,7 @@ struct TodayView: View {
                 focusCard
                 dueSoonCard
                 examCard
+                gradeCard
                 goalCard
                 weekCard
             }
@@ -205,6 +207,39 @@ struct TodayView: View {
             }
             .buttonStyle(.plain)
             .accessibilityElement(children: .combine)
+        }
+    }
+
+    @ViewBuilder
+    private var gradeCard: some View {
+        let graded = courses.filter { $0.hasGrades && $0.gradeSummary.currentPercent != nil }
+        if !graded.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text("Grades").font(.headline)
+                    Spacer()
+                    #if os(macOS)
+                    Button("All grades") { router.section = .grades }
+                        .font(.subheadline).buttonStyle(.borderless)
+                    #endif
+                }
+                ForEach(graded.prefix(5)) { course in
+                    let summary = course.gradeSummary
+                    let band = summary.currentPercent.flatMap { GradingScales.resolve(for: course, in: scales).band(for: $0) }
+                    HStack(spacing: 10) {
+                        CourseBadge(color: course.color, symbol: course.symbolName, size: 26)
+                        Text(course.name).font(.subheadline)
+                        Spacer()
+                        Text(GradeFormat.percent(summary.currentPercent)).monospacedDigit().foregroundStyle(.secondary)
+                        if let band {
+                            Text(band.label).font(.subheadline.weight(.bold)).foregroundStyle(course.color)
+                                .frame(minWidth: 28, alignment: .trailing)
+                        }
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+            }
+            .card()
         }
     }
 

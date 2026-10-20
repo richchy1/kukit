@@ -2,7 +2,7 @@ import Observation
 import SwiftUI
 
 enum AppSection: String, CaseIterable, Identifiable, Hashable {
-    case today, focus, tasks, courses, stats, settings, more
+    case today, focus, tasks, courses, grades, stats, settings, more
 
     var id: String { rawValue }
 
@@ -12,6 +12,7 @@ enum AppSection: String, CaseIterable, Identifiable, Hashable {
         case .focus: "Focus"
         case .tasks: "Tasks"
         case .courses: "Courses"
+        case .grades: "Grades"
         case .stats: "Stats"
         case .settings: "Settings"
         case .more: "More"
@@ -24,6 +25,7 @@ enum AppSection: String, CaseIterable, Identifiable, Hashable {
         case .focus: "timer"
         case .tasks: "checklist"
         case .courses: "books.vertical"
+        case .grades: "graduationcap"
         case .stats: "chart.bar.xaxis"
         case .settings: "gearshape"
         case .more: "ellipsis.circle"
@@ -34,7 +36,8 @@ enum AppSection: String, CaseIterable, Identifiable, Hashable {
 @MainActor
 @Observable
 final class AppRouter {
-    var section: AppSection = .today
+    /// Launch with `-startSection stats` (any section name) to open straight onto a screen.
+    var section: AppSection = AppSection(rawValue: UserDefaults.standard.string(forKey: "startSection") ?? "") ?? .today
 }
 
 #if os(iOS)

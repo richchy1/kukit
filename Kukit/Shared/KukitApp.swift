@@ -18,8 +18,20 @@ struct KukitApp: App {
         } catch {
             fatalError("Kukit could not open its database: \(error)")
         }
+        GradingScales.seedIfNeeded(container.mainContext)
         _timer = State(initialValue: TimerController(modelContext: container.mainContext))
     }
+
+    #if os(macOS)
+    /// Binding that only writes when the value really changes. Passing the @AppStorage binding
+    /// straight to MenuBarExtra makes SwiftUI rewrite it on every update, which spins the CPU in a loop.
+    private var menuBarInserted: Binding<Bool> {
+        Binding(
+            get: { showMenuBar },
+            set: { newValue in if newValue != showMenuBar { showMenuBar = newValue } }
+        )
+    }
+    #endif
 
     var body: some Scene {
         WindowGroup("Kukit", id: "main") {
@@ -33,7 +45,7 @@ struct KukitApp: App {
         #endif
 
         #if os(macOS)
-        MenuBarExtra(isInserted: $showMenuBar) {
+        MenuBarExtra(isInserted: menuBarInserted) {
             MenuBarTimerView()
                 .environment(timer)
                 .environment(router)

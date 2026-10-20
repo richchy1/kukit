@@ -45,6 +45,11 @@ final class ReminderScheduler {
 enum AssignmentActions {
     static func setDone(_ assignment: Assignment, _ done: Bool, context: ModelContext) {
         assignment.status = done ? .done : .todo
+        // A linked score is a guess until the task is done.
+        if let entry = assignment.gradeEntry {
+            entry.isPlanned = !done
+            if done { entry.date = .now }
+        }
         persist(assignment, context: context)
     }
 

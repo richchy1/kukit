@@ -15,6 +15,9 @@ final class TimerController {
     private(set) var selectedCourseID: UUID?
     /// The task the next session will be attached to (cleared once a session starts).
     private(set) var selectedAssignmentID: UUID?
+    /// "18:42" while a timer is active, refreshed once per second. Drives the Mac menu bar label,
+    /// which must not use a TimelineView (that makes the status item re-layout in a loop).
+    private(set) var clockText = ""
 
     @ObservationIgnored private let modelContext: ModelContext
     @ObservationIgnored private let defaults = UserDefaults.standard
@@ -105,6 +108,7 @@ final class TimerController {
         syncAlerts()
         updateTicking()
         updateActivity()
+        refreshClockText()
     }
 
     private func save(_ record: FocusRecord) {
@@ -119,6 +123,19 @@ final class TimerController {
         )
         modelContext.insert(session)
         try? modelContext.save()
+    }
+
+    private func refreshClockText(at now: Date = .now) {
+        let state = engine.state
+        let text: String
+        if !state.isActive {
+            text = ""
+        } else if let remaining = state.remaining(at: now) {
+            text = DurationFormat.clock(remaining)
+        } else {
+            text = DurationFormat.clock(state.elapsed(at: now).rounded(.down))
+        }
+        if text != clockText { clockText = text }
     }
 
     private func persist() {
@@ -151,7 +168,7 @@ final class TimerController {
                 try? await Task.sleep(for: .milliseconds(500))
                 guard let self, !Task.isCancelled else { return }
                 let events = self.engine.advance(now: .now)
-                if !events.isEmpty { self.commit(events) }
+                if !events.isEmpty { self.commit(events) } else { self.refreshClockText() }
             }
         }
     }

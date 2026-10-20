@@ -8,6 +8,7 @@ struct CourseDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Bindable var course: Course
+    @Query(sort: \GradingScale.createdAt) private var scales: [GradingScale]
     @State private var showingEdit = false
     @State private var taskEditor: TaskEditor?
 
@@ -47,6 +48,8 @@ struct CourseDetailView: View {
                     StatTile(title: "All time", value: DurationFormat.short(totalSeconds))
                     StatTile(title: "Sessions", value: "\(sessions.count)")
                 }
+
+                gradeCard
 
                 Button {
                     timer.selectCourse(course.id)
@@ -134,6 +137,36 @@ struct CourseDetailView: View {
             case .edit(let assignment): AssignmentEditorView(assignment: assignment)
             }
         }
+    }
+
+    private var gradeCard: some View {
+        let summary = course.gradeSummary
+        let scale = GradingScales.resolve(for: course, in: scales)
+        let band = summary.currentPercent.flatMap { scale.band(for: $0) }
+        return NavigationLink {
+            CourseGradesView(course: course)
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "graduationcap.fill")
+                    .font(.title3).foregroundStyle(course.color).frame(width: 32)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Grade").font(.headline).foregroundStyle(.primary)
+                    if course.hasGrades {
+                        Text(summary.currentPercent == nil
+                             ? "No scores yet"
+                             : "\(GradeFormat.percent(summary.currentPercent))\(band.map { " · \($0.label)" } ?? "")  →  projected \(GradeFormat.percent(summary.projectedPercent))")
+                            .font(.subheadline).foregroundStyle(.secondary)
+                    } else {
+                        Text("Set up weights and enter scores").font(.subheadline).foregroundStyle(.secondary)
+                    }
+                }
+                Spacer()
+                Image(systemName: "chevron.right").font(.footnote).foregroundStyle(.tertiary)
+            }
+            .contentShape(Rectangle())
+            .card()
+        }
+        .buttonStyle(.plain)
     }
 
     private var header: some View {

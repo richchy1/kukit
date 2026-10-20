@@ -44,6 +44,13 @@ final class Course {
     @Relationship(deleteRule: .cascade, inverse: \Assignment.course)
     var assignments: [Assignment]?
 
+    /// nil means "use the default grading scale".
+    var gradeScale: GradingScale?
+    var targetPercent: Double = 90
+
+    @Relationship(deleteRule: .cascade, inverse: \GradeCategory.course)
+    var gradeCategories: [GradeCategory]?
+
     init(name: String, code: String = "", credits: Double = 3,
          colorHex: String = CoursePalette.colors[0].hex, symbolName: String = "book.closed",
          instructor: String = "", semester: Semester? = nil) {
@@ -168,6 +175,7 @@ final class Assignment {
     var addedToCalendar: Bool = false
 
     var course: Course?
+    var gradeEntry: GradeEntry?
 
     init(title: String, course: Course?, type: AssignmentType = .homework,
          dueDate: Date? = nil, hasDueTime: Bool = false) {
@@ -235,6 +243,7 @@ final class TimerPreset {
 enum KukitSchema {
     static let models: [any PersistentModel.Type] = [
         Semester.self, Course.self, StudySession.self, TimerPreset.self, Assignment.self,
+        GradingScale.self, GradeCategory.self, GradeEntry.self,
     ]
 
     @MainActor
